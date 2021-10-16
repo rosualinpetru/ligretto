@@ -16,7 +16,7 @@ public class ConcurrentEventBus<T> implements EventBus<T> {
 
     private final Semaphore listenersSemaphore = new Semaphore(1);
     private final Semaphore publishSemaphore = new Semaphore(1);
-    private final Semaphore readSemaphore = new Semaphore(1);
+    private final Semaphore readSemaphore = new Semaphore(Integer.MAX_VALUE - 1);
 
     private boolean shouldDispose = false;
     private final Thread readFromQueueThread;
@@ -79,7 +79,7 @@ public class ConcurrentEventBus<T> implements EventBus<T> {
     private void readFromQueue() {
         try {
             while (!shouldDispose) {
-                readSemaphore.acquire(); // wait until there are events to be read in the queue
+                readSemaphore.acquire(); // wait until there are events to be read from the queue
 
                 publishSemaphore.acquire();
                 T event = eventsQueue.poll(); // get the next event
@@ -94,8 +94,6 @@ public class ConcurrentEventBus<T> implements EventBus<T> {
                     }
                 }
                 listenersSemaphore.release();
-
-                readSemaphore.release();
             }
         } catch (InterruptedException ignored) {
             // the thread must stop because EventBus is being disposed
