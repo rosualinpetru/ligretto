@@ -21,5 +21,18 @@ test {
     useJUnitPlatform()
 }
 
+tasks.withType(JavaCompile).all {
+    options.compilerArgs += ['--enable-preview']
+}
+
+tasks.withType(Test).all {
+    jvmArgs += '--enable-preview'
+}
+
+tasks.withType(JavaExec) {
+    jvmArgs += '--enable-preview'
+}
+
+
 sourceCompatibility = JavaVersion.VERSION_16
 targetCompatibility = JavaVersion.VERSION_16

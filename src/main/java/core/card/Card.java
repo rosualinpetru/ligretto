@@ -1,6 +1,6 @@
-package model.card;
+package core.card;
 
-import model.player.Player;
+import core.entities.Player;
 import org.javatuples.Triplet;
 
 import java.util.Optional;
@@ -24,6 +24,6 @@ public class Card {
 
     @Override
     public String toString() {
-        return Triplet.with(colour, number, player).toString();
+        return "" + colour + number;
     }
 }

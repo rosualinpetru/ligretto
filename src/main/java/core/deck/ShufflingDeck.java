@@ -1,10 +1,11 @@
-package model.deck;
+package core.deck;
 
-import model.card.Card;
+import core.card.Card;
 
 import java.util.List;
+import java.util.Optional;
 
-public final class ShufflingDeck implements Deck {
+public final class ShufflingDeck {
     private final static int STEP = 3;
 
     private int pointer = 0;
@@ -14,7 +15,10 @@ public final class ShufflingDeck implements Deck {
         this.cards = cards;
     }
 
-    public void shuffle()  {
+    public void shuffle() {
+        if (isEmpty()) {
+            return;
+        }
         pointer += STEP;
         if (pointer >= cards.size()) {
             pointer = 0;
@@ -24,13 +28,20 @@ public final class ShufflingDeck implements Deck {
         }
     }
 
-    public Card pick() {
-        var card = cards.get(pointer);
-        cards.remove(card);
-        return card;
+    public boolean isEmpty() {
+        return cards.size() == 0;
     }
 
-    public void putBack(Card card) {
+    public Optional<Card> pick() {
+        if (isEmpty()) {
+            return Optional.empty();
+        }
+        var card = cards.get(pointer);
+        cards.remove(card);
+        return Optional.of(card);
+    }
+
+    public void put(Card card) {
         cards.add(pointer, card);
     }
 

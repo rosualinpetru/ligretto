@@ -1,18 +1,12 @@
-package model;
+package core.entities;
 
-import events.EventBus;
 import events.impl.ConcurrentEventBus;
-import model.board.Table;
-import model.card.Card;
-import model.card.CardColour;
-import model.card.CardNumber;
-import model.deck.OnTableDeck;
-import model.event.CardPlacedEvent;
-import model.player.Bot;
-import model.player.Player;
+import core.card.Card;
+import core.card.CardColour;
+import core.card.CardNumber;
+import core.deck.OnTableDeck;
+import core.event.CardPlacedEvent;
 import org.junit.jupiter.api.Test;
-
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,12 +15,15 @@ public class ModelTests {
 
     @Test
     public void fittingDeckFoundOnTheSecondPosition() {
-        var table = new Table();
-        table.startDeck(new Card(CardColour.BLUE, CardNumber.ONE, null));
-        table.startDeck(new Card(CardColour.YELLOW, CardNumber.ONE, null));
+
+        var eventBus = new ConcurrentEventBus<CardPlacedEvent>();
+        var table = new Table(eventBus);
+
+        table.createNewDeck(new Card(CardColour.BLUE, CardNumber.ONE, null));
+        table.createNewDeck(new Card(CardColour.YELLOW, CardNumber.ONE, null));
 
         var card = new Card(CardColour.YELLOW, CardNumber.TWO, null);
-        var position = table.findFittingDeck(card);
+        var position = table.findFitPosition(card);
         assertTrue(position.isPresent() && position.get() == 2);
 
     }
@@ -50,21 +47,17 @@ public class ModelTests {
     }
 
     @Test
-    public void testReentrantReadWriteLock() {
-        var rwl = new ReentrantReadWriteLock();
-        rwl.writeLock().lock();
-        rwl.writeLock().lock();
-    }
-
-    @Test
     public void racingForPlacingACardOnAOnTableDesk() throws InterruptedException {
-        var bus = new ConcurrentEventBus<CardPlacedEvent>();
-        var table = new Table();
+        var eventBus = new ConcurrentEventBus<CardPlacedEvent>();
+        var table = new Table(eventBus);
 
-        var bot1 = new Bot("foo", table, bus);
-        var bot2 = new Bot("bar", table, bus);
+        var bot1 = new Bot("foo");
+        var bot2 = new Bot("bar");
 
-        table.startDeck(new Card(CardColour.BLUE, CardNumber.ONE, bot1));
+        table.registerPlayer(bot1);
+        table.registerPlayer(bot2);
+
+        table.createNewDeck(new Card(CardColour.BLUE, CardNumber.ONE, bot1));
 
         var t1 = racingThread_racingForPlacingACardOnAOnTableDesk(table, bot1, bot2);
         var t2 = racingThread_racingForPlacingACardOnAOnTableDesk(table, bot2, bot1);
@@ -84,10 +77,10 @@ public class ModelTests {
     private Thread racingThread_racingForPlacingACardOnAOnTableDesk(Table table, Player player1, Player player2) {
         return new Thread(() -> {
             var card = new Card(CardColour.BLUE, CardNumber.TWO, player1);
-            var positionOpt = table.findFittingDeck(card);
+            var positionOpt = table.findFitPosition(card);
             if (positionOpt.isPresent()) {
                 var position = positionOpt.get();
-                var condition = table.placeCardAtPosition(card, position);
+                var condition = table.putAtPosition(card, position);
                 var deck = table.getDeckAtPosition(position);
                 var topCardOpt = deck.map(OnTableDeck::peek);
                 assertTrue(topCardOpt.isPresent());

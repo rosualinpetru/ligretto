@@ -73,14 +73,12 @@ public class ConcurrentEventBus<T> implements EventBus<T> {
             listenersSemaphore.acquire();
             listeners.clear();
             listenersSemaphore.release();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (InterruptedException ignored) {
         }
 
         shouldDispose = true;
         readFromQueueThread.interrupt();
-        pool.shutdown();
-        while (!pool.isTerminated()) {}
+        pool.shutdownNow();
     }
 
     private void readFromQueue() {
