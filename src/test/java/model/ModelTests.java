@@ -10,7 +10,10 @@ import model.deck.OnTableDeck;
 import model.event.CardPlacedEvent;
 import model.player.Bot;
 import model.player.Player;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -18,10 +21,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ModelTests {
 
+    @Mock
+    private EventBus<CardPlacedEvent> eventBusMock;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     public void fittingDeckFoundOnTheSecondPosition() {
-        var table = new Table();
+        var table = new Table(eventBusMock);
         table.startDeck(new Card(CardColour.BLUE, CardNumber.ONE, null));
         table.startDeck(new Card(CardColour.YELLOW, CardNumber.ONE, null));
 
@@ -59,10 +69,10 @@ public class ModelTests {
     @Test
     public void racingForPlacingACardOnAOnTableDesk() throws InterruptedException {
         var bus = new ConcurrentEventBus<CardPlacedEvent>();
-        var table = new Table();
+        var table = new Table(eventBusMock);
 
-        var bot1 = new Bot("foo", table, bus);
-        var bot2 = new Bot("bar", table, bus);
+        var bot1 = new Bot("foo", table);
+        var bot2 = new Bot("bar", table);
 
         table.startDeck(new Card(CardColour.BLUE, CardNumber.ONE, bot1));
 

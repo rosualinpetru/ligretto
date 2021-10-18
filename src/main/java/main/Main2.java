@@ -1,6 +1,5 @@
 package main;
 
-import events.EventBus;
 import events.impl.ConcurrentEventBus;
 import model.board.Table;
 import model.event.CardPlacedEvent;
@@ -10,13 +9,13 @@ public class Main2 {
     public static void main(String[] args) throws InterruptedException {
         var eventBus = new ConcurrentEventBus<CardPlacedEvent>();
 
-        var table = new Table();
+        var table = new Table(eventBus);
 
-        var bot1 = new Bot("foo", table, eventBus);
-        var bot2 = new Bot("bar", table, eventBus);
-        var bot3 = new Bot("baz", table, eventBus);
-        var bot4 = new Bot("qux", table, eventBus);
-        var bot5 = new Bot("quux", table, eventBus);
+        var bot1 = new Bot("foo", table);
+        var bot2 = new Bot("bar", table);
+        var bot3 = new Bot("baz", table);
+        var bot4 = new Bot("qux", table);
+        var bot5 = new Bot("quux", table);
 
         var bot1Thread = new Thread(bot1);
         var bot2Thread = new Thread(bot2);

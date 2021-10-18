@@ -6,6 +6,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -36,11 +37,14 @@ public class EventListenerTests {
         integerEventListener.subscribe(x -> {
             assertTrue(integerEventListener.received());
             assertEquals(1234, x);
+
+            eventBus.unregisterListener(integerEventListener);
         });
 
         assertFalse(integerEventListener.received());
 
         eventBus.publish(1234);
+
     }
 
     @Test
@@ -55,7 +59,13 @@ public class EventListenerTests {
         countableIntegerEventListener.subscribe(x -> {
             assertEquals(1234, x);
             count.getAndIncrement();
-            assertEquals(count.get(), countableIntegerEventListener.count);
+            if (count.get() > countableIntegerEventListener.count) {
+                fail();
+            }
+            if (count.get() == countableIntegerEventListener.count) {
+                assertTrue(true);
+                eventBus.unregisterListener(countableIntegerEventListener);
+            }
         });
 
         assertEquals(0, countableIntegerEventListener.count);
@@ -83,6 +93,8 @@ public class EventListenerTests {
             }
             count.getAndIncrement();
             assertEquals(count.get(), countableIntegerEventListener.count);
+
+            eventBus.unregisterListener(countableIntegerEventListener);
         });
 
         assertEquals(0, countableIntegerEventListener.count);
@@ -104,7 +116,14 @@ public class EventListenerTests {
 
         assertEquals(0, countableIntegerEventListener.count);
 
+        Semaphore semaphore = new Semaphore(1);
+
         countableIntegerEventListener.subscribe(x -> {
+            try {
+                semaphore.acquire();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             switch (lastNumber.get()) {
                 case 0 -> {
                     assertEquals(1234, x);
@@ -117,11 +136,14 @@ public class EventListenerTests {
                 case 3412 -> {
                     assertEquals(551, x);
                     assertEquals(3, countableIntegerEventListener.count);
+
+                    eventBus.unregisterListener(countableIntegerEventListener);
                 }
                 default -> fail();
             }
 
             lastNumber.set(x);
+            semaphore.release();
         });
 
         assertEquals(0, countableIntegerEventListener.count);
