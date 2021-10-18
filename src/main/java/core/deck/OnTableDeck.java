@@ -1,23 +1,21 @@
-package model.deck;
+package core.deck;
 
-import model.card.Card;
+import core.card.Card;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.concurrent.Semaphore;
+import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 //Here is a lot of concurrency
-public class OnTableDeck implements Deck {
-    private Deque<Card> cards = new ArrayDeque<>();
+public class OnTableDeck {
+    private final Deque<Card> cards = new ArrayDeque<>();
 
     private final ReadWriteLock rwl = new ReentrantReadWriteLock();
     private final Lock readLock = rwl.readLock();
     private final Lock writeLock = rwl.writeLock();
-
-    private final Semaphore writeSemaphore = new Semaphore(1);
 
     public OnTableDeck(Card initialCard) {
         cards.push(initialCard);
@@ -56,19 +54,19 @@ public class OnTableDeck implements Deck {
     public boolean put(Card card) {
         try {
             writeLock.lock();
-            writeSemaphore.acquire();
             if (cardFits(card)) {
                 cards.push(card);
                 return true;
             }
             return false;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return false;
         } finally {
-            writeSemaphore.release();
             writeLock.unlock();
         }
+    }
+
+
+    public synchronized List<Card> getCards() {
+        return cards.stream().toList();
     }
 
     /**

@@ -1,15 +1,16 @@
 package util;
 
-import model.card.Card;
-import model.card.CardColour;
-import model.card.CardNumber;
-import model.player.Player;
-import model.deck.FacedUpCards;
-import model.deck.ShufflingDeck;
-import model.deck.TargetDeck;
+import core.card.Card;
+import core.card.CardColour;
+import core.card.CardNumber;
+import core.entities.Player;
+import core.deck.FacedUpCards;
+import core.deck.ShufflingDeck;
+import core.deck.TargetDeck;
 import org.javatuples.Triplet;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,7 +30,7 @@ public class DeckShuffler {
                 .flatMap(number ->
                         Arrays.stream(CardColour.values()).map(colour -> new Card(colour, number, player)))
                 .collect(Collectors.toList());
-        Collections.shuffle(deck, new Random(player.hashCode()));
+        Collections.shuffle(deck, new Random(ThreadLocalRandom.current().nextLong()));
         return divideInSmallerDecks(deck);
     }
 
@@ -51,6 +52,11 @@ public class DeckShuffler {
 
         var targetDeck = new Stack<Card>();
         targetDeck.addAll(targetDeckList);
+
+        System.out.println(facedUpCards);
+        System.out.println(targetDeck);
+        System.out.println(shufflingDeck);
+        System.out.println();
 
         return Triplet.with(new FacedUpCards(facedUpCards), new TargetDeck(targetDeck), new ShufflingDeck(shufflingDeck));
     }

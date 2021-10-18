@@ -1,4 +1,4 @@
-package model.card;
+package core.card;
 
 import java.util.Optional;
 
@@ -31,5 +31,10 @@ public enum CardNumber {
             case 10 -> Optional.of(TEN);
             default -> Optional.empty();
         };
+    }
+
+    @Override
+    public String toString() {
+        return (this.ordinal() + 1) + "";
     }
 }
