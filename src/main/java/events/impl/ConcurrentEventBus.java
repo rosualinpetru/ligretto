@@ -20,7 +20,7 @@ public class ConcurrentEventBus<T> implements EventBus<T> {
 
     private final Semaphore listenersSemaphore = new Semaphore(1);
     private final Semaphore publishSemaphore = new Semaphore(1);
-    private final Semaphore readSemaphore = new Semaphore(Integer.MAX_VALUE - 1);
+    private final Semaphore readSemaphore = new Semaphore(0); // initial number of permits !!
 
     private boolean shouldDispose = false;
     private final Thread readFromQueueThread;
@@ -91,7 +91,6 @@ public class ConcurrentEventBus<T> implements EventBus<T> {
                 publishSemaphore.release();
 
                 // notify all listeners
-
                 listenersSemaphore.acquire();
                 if (event != null) {
                     listeners.stream()

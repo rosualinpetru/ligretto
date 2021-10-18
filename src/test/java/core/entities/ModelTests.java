@@ -1,23 +1,32 @@
 package core.entities;
 
-import events.impl.ConcurrentEventBus;
+import events.EventBus;
 import core.card.Card;
 import core.card.CardColour;
 import core.card.CardNumber;
 import core.deck.OnTableDeck;
 import core.event.CardPlacedEvent;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ModelTests {
 
+    @Mock
+    private EventBus<CardPlacedEvent> eventBusMock;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     public void fittingDeckFoundOnTheSecondPosition() {
 
-        var eventBus = new ConcurrentEventBus<CardPlacedEvent>();
-        var table = new Table(eventBus);
+        var table = new Table(eventBusMock);
 
         table.createNewDeck(new Card(CardColour.BLUE, CardNumber.ONE, null));
         table.createNewDeck(new Card(CardColour.YELLOW, CardNumber.ONE, null));
@@ -48,8 +57,8 @@ public class ModelTests {
 
     @Test
     public void racingForPlacingACardOnAOnTableDesk() throws InterruptedException {
-        var eventBus = new ConcurrentEventBus<CardPlacedEvent>();
-        var table = new Table(eventBus);
+
+        var table = new Table(eventBusMock);
 
         var bot1 = new Bot("foo");
         var bot2 = new Bot("bar");
