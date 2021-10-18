@@ -7,9 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 
 public class ConcurrentEventBus<T> implements EventBus<T> {
+
+    private final ExecutorService pool;
 
     private final List<EventListener<T>> listeners = new ArrayList<>();
     private final Queue<T> eventsQueue = new ConcurrentLinkedQueue<>();
@@ -22,6 +26,7 @@ public class ConcurrentEventBus<T> implements EventBus<T> {
     private final Thread readFromQueueThread;
 
     public ConcurrentEventBus() {
+        pool = Executors.newFixedThreadPool(4);
         readFromQueueThread = new Thread(this::readFromQueue);
         readFromQueueThread.start();
     }
@@ -74,6 +79,8 @@ public class ConcurrentEventBus<T> implements EventBus<T> {
 
         shouldDispose = true;
         readFromQueueThread.interrupt();
+        pool.shutdown();
+        while (!pool.isTerminated()) {}
     }
 
     private void readFromQueue() {
@@ -89,9 +96,9 @@ public class ConcurrentEventBus<T> implements EventBus<T> {
 
                 listenersSemaphore.acquire();
                 if (event != null) {
-                    for (EventListener<T> listener : listeners) {
-                        listener.notify(event);
-                    }
+                    listeners.stream()
+                            .map(listener -> new Thread(() -> listener.notify(event)))
+                            .forEach(pool::execute);
                 }
                 listenersSemaphore.release();
             }

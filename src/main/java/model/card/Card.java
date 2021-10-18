@@ -3,19 +3,27 @@ package model.card;
 import model.player.Player;
 import org.javatuples.Triplet;
 
+import java.util.Optional;
+
 public class Card {
     public final CardColour colour;
-    public final CardNumber cardNumber;
-    private Player player;
+    public final CardNumber number;
+    public final Player player;
 
-    public Card(CardColour colour, CardNumber cardNumber, Player player) {
+    public Card(CardColour colour, CardNumber number, Player player) {
         this.colour = colour;
-        this.cardNumber = cardNumber;
+        this.number = number;
         this.player = player;
+    }
+
+    public boolean isSuccessor(Card card) {
+        Optional<CardNumber> next = card.number.next();
+        return next.isPresent() && next.get() == number && card.colour == colour;
+
     }
 
     @Override
     public String toString() {
-        return Triplet.with(colour, cardNumber, player).toString();
+        return Triplet.with(colour, number, player).toString();
     }
 }

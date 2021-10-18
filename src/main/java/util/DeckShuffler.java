@@ -10,7 +10,9 @@ import model.deck.TargetDeck;
 import org.javatuples.Triplet;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DeckShuffler {
 
@@ -27,7 +29,7 @@ public class DeckShuffler {
                 .flatMap(number ->
                         Arrays.stream(CardColour.values()).map(colour -> new Card(colour, number, player)))
                 .collect(Collectors.toList());
-        Collections.shuffle(deck);
+        Collections.shuffle(deck, new Random(player.hashCode()));
         return divideInSmallerDecks(deck);
     }
 
@@ -42,9 +44,10 @@ public class DeckShuffler {
         fullDeck.removeAll(shufflingDeck);
 
         var facedUpCards = new HashMap<Integer, Card>();
-        for (int i = 1; i <= FACED_UP_CARDS_COUNT; i++) {
-            facedUpCards.put(i, facedUpCardsList.get(i - 1));
-        }
+        AtomicInteger counter = new AtomicInteger();
+        Stream.generate(counter::incrementAndGet)
+                .takeWhile(it -> it <= FACED_UP_CARDS_COUNT)
+                .forEach(it -> facedUpCards.put(it, facedUpCardsList.get(it - 1)));
 
         var targetDeck = new Stack<Card>();
         targetDeck.addAll(targetDeckList);

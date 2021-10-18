@@ -17,6 +17,10 @@ public record FacedUpCards(Map<Integer, Card> cards) implements Deck {
         return card;
     }
 
+    public int size() {
+        return cards.size();
+    }
+
     @Override
     public String toString() {
         return cards.values().toString();

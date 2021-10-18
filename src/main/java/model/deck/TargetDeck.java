@@ -6,7 +6,7 @@ import java.util.Stack;
 
 public record TargetDeck(Stack<Card> cards) implements Deck {
 
-    public Card pop() {
+    public Card pop()  {
         return cards.pop();
     }
 

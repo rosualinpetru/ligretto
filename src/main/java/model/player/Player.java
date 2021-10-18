@@ -1,9 +1,12 @@
 package model.player;
 
+import model.board.Table;
 import model.deck.FacedUpCards;
 import model.deck.ShufflingDeck;
 import model.deck.TargetDeck;
 import util.DeckShuffler;
+
+import java.util.Objects;
 
 public abstract class Player {
     protected final String id;
@@ -12,8 +15,11 @@ public abstract class Player {
     protected final TargetDeck targetDeck;
     protected final ShufflingDeck shufflingDeck;
 
-    public Player(String id) {
+    protected final Table table;
+
+    public Player(String id, Table table) {
         this.id = id;
+        this.table = table;
 
         var decks = DeckShuffler.shuffleStartingDecks(this);
         facedUpCards = decks.getValue0();
@@ -24,5 +30,18 @@ public abstract class Player {
     @Override
     public String toString() {
         return id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return id.equals(player.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

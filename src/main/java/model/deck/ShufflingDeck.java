@@ -14,7 +14,7 @@ public final class ShufflingDeck implements Deck {
         this.cards = cards;
     }
 
-    public void shuffle() {
+    public void shuffle()  {
         pointer += STEP;
         if (pointer >= cards.size()) {
             pointer = 0;
