@@ -1,7 +1,6 @@
 package core.card;
 
 import core.entities.Player;
-import org.javatuples.Triplet;
 
 import java.util.Optional;
 

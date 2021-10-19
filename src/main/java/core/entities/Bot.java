@@ -6,27 +6,21 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadLocalRandom;
 
 public final class Bot extends Player {
+    /**
+     * We consider that a player can only do one action at a time:
+     * - Shuffle the cards
+     * - Handle new card placement
+     */
     private final Semaphore semaphore = new Semaphore(1);
 
     public Bot(String id) {
         super(id);
     }
 
-    public void showStatus() {
-        try {
-            semaphore.acquire();
-        } catch (InterruptedException e) {
-            semaphore.release();
-        }
-        System.out.println("Bot{" +
-                "id='" + name + '\'' +
-                ", facedUpCards=" + facedUpCards +
-                ", targetDeck=" + targetDeck +
-                ", shufflingDeck=" + shufflingDeck +
-                '}');
-        semaphore.release();
-    }
-
+    /**
+     * A player constantly shuffles the shuffling deck in order to find fitting cards.
+     * This shuffles the deck and competes with other threads in placing cards on the table.
+     */
     @Override
     public void run() {
         if (table == null) {
@@ -39,21 +33,23 @@ public final class Bot extends Player {
             } catch (InterruptedException e) {
                 return;
             }
-            // needs optimisation
+            //TODO: a bot should not constantly search for 1s. Needs optimisation
             putFacedUpOnes();
+
             var cardOpt = shufflingDeck.pick();
             if (cardOpt.isEmpty()) {
                 break;
             }
+
             var card = cardOpt.get();
             if (card.number.isFirst()) {
-                table.createNewDeck(card);
+                table.newDeck(card);
 
             } else {
-                var fittingDeckPositionOpt = table.findFitPosition(card);
-                if (fittingDeckPositionOpt.isPresent()) {
-                    var fittingDeckPosition = fittingDeckPositionOpt.get();
-                    var successfullyPlacedCard = table.putAtPosition(card, fittingDeckPosition);
+                var fitPositionOpt = table.fittingDeck(card);
+                if (fitPositionOpt.isPresent()) {
+                    var fitPosition = fitPositionOpt.get();
+                    var successfullyPlacedCard = table.put(card, fitPosition);
                     if (!successfullyPlacedCard) {
                         shufflingDeck.put(card);
                     }
@@ -63,21 +59,29 @@ public final class Bot extends Player {
             }
             shufflingDeck.shuffle();
             semaphore.release();
-            try {
-                // No, daca imi explica si mie cineva de ce naiba daca nu pun linia asta crapa tot programul.
-                // O sa fie mereu remiza.
-                // 0L poate fi inlocuit cu ThreadLocalRandom.nextDouble(0.3, 0.5) * 1000L
-                Thread.sleep(0L);
-            } catch (InterruptedException ignored) {
-                return;
-            }
+            /* This is very important. Because of time slicing algorithm, each thread can
+            execute a certain amount of instructions. The problem is that between the Semaphore
+            release and acquire there is only a jump instruction. This leads to the main bot thread
+            to constantly acquire the semaphore, without leaving a change for the tasks of the event
+            bus to be handled. What this means is that shuffling will have a higher priority than
+            responding to updates on the table, which is the exact opposite of how the bot should work,
+
+            Thread.yield() instructs that the current thread gives up its processor time, leaving the event
+            handler to acquire the semaphore.
+             */
+            Thread.yield();
         }
+        // If no cards left in the shuffling deck, wait for other events.
         while (true) {
 
         }
     }
 
-
+    /**
+     * A player also reacts whenever a card is placed on the table.
+     * Upon a new card being placed on the table, the player will examine the
+     * faced up cards in search of a card that fits on the recently updated deck.
+     */
     void handleCardPlaced(CardPlacedEvent event) {
         try {
             semaphore.acquire();
@@ -86,18 +90,19 @@ public final class Bot extends Player {
         }
         for (int i = 1; i <= facedUpCards.size(); i++) {
             var cardOpt = facedUpCards.pick(i);
-            if(cardOpt.isEmpty())
+            if (cardOpt.isEmpty())
                 continue;
             var card = cardOpt.get();
             if (table.fitsPosition(card, event.position())) {
-                var successfullyPlacedCard = table.putAtPosition(card, event.position());
+                var successfullyPlacedCard = table.put(card, event.position());
                 if (successfullyPlacedCard) {
                     updateFacedUpCards(i);
                 } else {
-                    // The bot attempted to put a card but was to slow
-                    // This means the card has changed and it's not worth
-                    // investigating during this event handling task
                     facedUpCards.put(i, card);
+                    /* The bot attempted to put a card but the deck has been
+                    already updated
+                    This means the card has changed and it's not worth
+                    investigating during this event handling task */
                     semaphore.release();
                     return;
                 }
@@ -108,14 +113,18 @@ public final class Bot extends Player {
         semaphore.release();
     }
 
+    /**
+     * This function searches for 1s on the faced up cards and places them
+     * on the table.
+     */
     private void putFacedUpOnes() {
         for (int i = 1; i <= facedUpCards.size(); i++) {
             var cardOpt = facedUpCards.pick(i);
-            if(cardOpt.isEmpty())
+            if (cardOpt.isEmpty())
                 continue;
             var card = cardOpt.get();
             if (card.number.isFirst()) {
-                table.createNewDeck(card);
+                table.newDeck(card);
                 updateFacedUpCards(i);
             } else {
                 facedUpCards.put(i, card);
@@ -123,12 +132,33 @@ public final class Bot extends Player {
         }
     }
 
+    /**
+     * This function updated the faced up cards by popping a cards from the target deck.
+     *
+     * TODO: The winner ends up with lesser faced up cards than it should.
+     */
     private void updateFacedUpCards(int position) {
         var newCard = targetDeck.pop();
         if (newCard.isPresent())
             facedUpCards.put(position, newCard.get());
         else
-            table.endGame(this);
+            table.end(this);
+    }
+
+    @Override
+    public String toString() {
+        try {
+            semaphore.acquire();
+        } catch (InterruptedException ignored) {
+        }
+        String s = "Bot{" +
+                "id='" + name + '\'' +
+                ", facedUpCards=" + facedUpCards +
+                ", targetDeck=" + targetDeck +
+                ", shufflingDeck=" + shufflingDeck +
+                '}';
+        semaphore.release();
+        return s;
     }
 
 }
