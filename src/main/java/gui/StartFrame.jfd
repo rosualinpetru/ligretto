@@ -1,0 +1,18 @@
+JFDML JFormDesigner: "7.0.4.0.360" Java: "11.0.12" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class javax.swing.BoxLayout ) ) {
+			name: "this"
+			"visible": true
+			"minimumSize": new java.awt.Dimension( 600, 400 )
+			add( new FormComponent( "gui.BackgroundPanel" ) {
+				name: "backgroundPanel1"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 880, 640 )
+		} )
+	}
+}
