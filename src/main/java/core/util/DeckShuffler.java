@@ -1,4 +1,4 @@
-package util;
+package core.util;
 
 import core.card.Card;
 import core.card.CardColour;

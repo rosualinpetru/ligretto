@@ -53,7 +53,6 @@ public final class ShufflingDeck {
      * pick every third card from the deck. Upon reaching the end, the deck
      * is shifted to left by one.
      * <p>
-     * TODO: Needs further optimisation.
      */
     public void shuffle() {
         if (isEmpty()) {

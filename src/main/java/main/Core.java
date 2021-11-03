@@ -15,13 +15,6 @@ public class Core {
             table.register(new Bot("id" + i));
         }
 
-        // The round also starts in a different thread from the main.
-        var tableThread = new Thread(table);
-        tableThread.setName("round1");
-        tableThread.start();
-        tableThread.join();
-        table.score();
-        table.state();
-
+        table.startRound();
     }
 }
