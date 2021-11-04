@@ -4,7 +4,6 @@ import core.event.CardPlacedEvent;
 import core.exception.GameEndedError;
 
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.ThreadLocalRandom;
 
 public final class Bot extends Player {
     /**
@@ -14,8 +13,15 @@ public final class Bot extends Player {
      */
     private final Semaphore semaphore = new Semaphore(1);
 
-    public Bot(String id) {
+    private final long delayMilliseconds;
+
+    public Bot(String id, long delayMilliseconds) {
         super(id);
+        this.delayMilliseconds = Math.max(0, delayMilliseconds);
+    }
+
+    public Bot(String id) {
+        this(id, 0);
     }
 
     /**
@@ -32,6 +38,9 @@ public final class Bot extends Player {
         try {
             while (!table.isEnded() && !Thread.interrupted()) {
                 if (!shufflingDeck.isEmpty()) {
+
+                    delay();
+
                     semaphore.acquire();
 
                     //TODO: a bot should not constantly search for 1s. Needs optimisation
@@ -149,6 +158,14 @@ public final class Bot extends Player {
         }
         newCard.ifPresent(card -> facedUpCards.put(position, card));
 
+    }
+
+    private void delay() throws InterruptedException {
+        if (delayMilliseconds == 0) {
+            return;
+        }
+
+        Thread.sleep(delayMilliseconds);
     }
 
     @Override
