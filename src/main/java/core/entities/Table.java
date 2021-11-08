@@ -1,7 +1,6 @@
 package core.entities;
 
-import core.exception.GameEndedError;
-import core.exception.GameNotEndedError;
+import core.exception.IllegalTableCallError;
 import events.EventBus;
 import core.card.Card;
 import core.deck.OnTableDeck;
@@ -10,6 +9,7 @@ import events.impl.ConcurrentEventBus;
 import events.impl.EventListener;
 import org.javatuples.Pair;
 
+import java.time.OffsetTime;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -18,19 +18,18 @@ import java.util.stream.Collectors;
 public class Table {
 
     /* ======== FIELDS ======== */
-    private final EventBus<CardPlacedEvent> eventBus;
+    private final EventBus<CardPlacedEvent> eventBus = new ConcurrentEventBus<>();
+    private final Checker checker = new Checker(this);
 
     private final List<Player> players = new ArrayList<>();
     private final List<Thread> botThreads = new ArrayList<>();
+
     private Player winner;
 
     private static int roundCounter = 0;
 
     private final AtomicInteger decksCounter = new AtomicInteger();
-    /**
-     * Most function throw either {@link GameEndedError} or {@link GameNotEndedError} based on this boolean.
-     */
-    private volatile boolean ended = true;
+    private volatile TableState state = TableState.INITIALIZING;
 
     /**
      * Although expensive, it allows both reads and written on all
@@ -51,15 +50,16 @@ public class Table {
 
     /* ======== CONSTR ======== */
     public Table() {
-        this.eventBus = new ConcurrentEventBus<>();
+        var listener = new EventListener<CardPlacedEvent>();
+        listener.subscribe(event -> checker.setTimestamp(OffsetTime.now()));
+        eventBus.registerListener(listener);
     }
 
     /* ======== THREAD ======== */
     private class TableThread implements Runnable {
         /**
          * Upon starting the game, all player threads will also start.
-         * Also, a game blocks the caller threads.
-         * <p>
+         * Also, a round blocks the the thread which started it.
          * TODO: Insert Human thread
          */
         @Override
@@ -72,7 +72,10 @@ public class Table {
                 }
             });
             eventBus.dispose();
-            System.out.println(winner.name + " WINS!");
+            if(winner != null)
+                System.out.println(winner.name + " WINS!");
+            else
+                System.out.println("TIE!");
             score();
             state();
         }
@@ -85,7 +88,7 @@ public class Table {
                     .map(player -> {
                         var score = endCopy.stream()
                                 .flatMap(entry -> entry.getValue().getAll().stream())
-                                .filter(card -> card.player.equals(player))
+                                .filter(card -> card.player().equals(player))
                                 .count();
                         return Pair.with(player.name, score);
                     }).forEach(System.out::println);
@@ -110,17 +113,18 @@ public class Table {
     }
 
     /* ======== PUBLIC ======== */
+
     /**
      * Upon registration, the player has the table set using the setter.
      * Afterwards, a thread is created for each player.
      * Furthermore, each player subscribes to the event bus of placed cards.
      *
      * @param player The player that joins the table.
-     * @throws GameNotEndedError if the game is not ended.
+     * @throws IllegalTableCallError if the game is not ended.
      */
     public void register(Player player) {
-        if (!isEnded())
-            throw new GameNotEndedError();
+        if (state != TableState.INITIALIZING)
+            throw new IllegalTableCallError(TableState.INITIALIZING, state);
 
         players.add(player);
         player.setTable(this);
@@ -137,41 +141,62 @@ public class Table {
     /**
      * Start a new round. This function also resets the configuration on the table.
      *
-     * @throws InterruptedException join thread.
-     * @throws GameNotEndedError    if the game is not ended.
+     * @throws InterruptedException  join thread.
+     * @throws IllegalTableCallError if the game is not ended.
      */
-    public void startRound() throws InterruptedException {
-        if (!isEnded())
-            throw new GameNotEndedError();
+    public void start() throws InterruptedException {
+        if (state != TableState.INITIALIZING)
+            throw new IllegalTableCallError(TableState.INITIALIZING, state);
 
-        //pack table reset
-        Runnable reset = () -> {
-            ended = false;
-            players.forEach(Player::init);
-            botThreads.clear();
-            players.forEach(it -> {
-                        var thread = new Thread(it);
-                        thread.setName(it.name);
-                        botThreads.add(thread);
-                    }
-            );
-            decksCounter.set(0);
-            decks.clear();
-            winner = null;
-            endCopy = null;
-        };
-        reset.run();
+        state = TableState.ONGOING;
+        botThreads.clear();
+        players.forEach(it -> {
+                    var thread = new Thread(it);
+                    thread.setName(it.name);
+                    botThreads.add(thread);
+                }
+        );
+        decksCounter.set(0);
+        decks.clear();
+        winner = null;
+        endCopy = null;
         roundCounter++;
 
+
+        var checkerThread = new Thread(checker);
+        checkerThread.setDaemon(true);
+        checkerThread.setName("checker");
+
         var tableThread = new Thread(new TableThread());
-        tableThread.setName("Round " + roundCounter);
+        tableThread.setName("round-" + roundCounter);
+
+        checkerThread.start();
         tableThread.start();
         tableThread.join();
     }
 
-    /* ======== PACKAGE PRIVATE ======== */
-    boolean isEnded() {
-        return ended;
+
+    /* ======== PACKAGE ======== */
+    public TableState getState() {
+        return state;
+    }
+
+    /**
+     * While the game is frozen, all entities are stuck, leaving all locks and semaphores
+     * available to the checker.
+     */
+    void pause() {
+        state = TableState.PAUSED;
+    }
+
+    void resume() {
+        state = TableState.ONGOING;
+    }
+
+
+    public TableData getAllData() {
+        var visibleCards = players.stream().flatMap(Player::getVisibleCards).toList();
+        return new TableData(visibleCards, decks.stream().map(Map.Entry::getValue).toList());
     }
 
     /**
@@ -180,13 +205,13 @@ public class Table {
      * It is a rare case, but it is possible that two players can win
      * at the same time.
      *
-     * @throws GameEndedError if the game is already ended.
+     * @throws IllegalTableCallError if the game is already ended.
      */
     synchronized void end(Player player) {
-        if (isEnded())
-            throw new GameEndedError();
+        if (state != TableState.ONGOING && state != TableState.PAUSED)
+            throw new IllegalTableCallError(TableState.ONGOING, state);
 
-        ended = true;
+        state = TableState.ENDED;
         endCopy = new HashSet<>(decks);
         botThreads.forEach(Thread::interrupt);
         winner = player;
@@ -196,11 +221,11 @@ public class Table {
      * Starts a new deck on the table. This function relies on the {@link CopyOnWriteArraySet}.
      *
      * @param card The initial card of the deck.
-     * @throws GameEndedError if the game is already ended.
+     * @throws IllegalTableCallError if the game is already ended.
      */
     void newDeck(Card card) {
-        if (isEnded())
-            throw new GameEndedError();
+        if (state != TableState.ONGOING)
+            throw new IllegalTableCallError(TableState.ONGOING, state);
 
         OnTableDeck deck = new OnTableDeck(card);
         var counter = decksCounter.incrementAndGet();
@@ -216,16 +241,16 @@ public class Table {
      * @param card     Card to be placed.
      * @param position The position of the deck on which a card will be placed.
      * @return Boolean representing whether the operation was successful or not.
-     * @throws GameEndedError if the game is already ended.
+     * @throws IllegalTableCallError if the game is already ended.
      */
     boolean put(Card card, int position) {
-        if (isEnded())
-            throw new GameEndedError();
+        if (state != TableState.ONGOING)
+            throw new IllegalTableCallError(TableState.ONGOING, state);
 
         var deckOpt = getDeck(position);
         if (deckOpt.isPresent()) {
             var deck = deckOpt.get();
-            String s = "Attempt: " + card.player.name + ", " + card + ", position " + position + " - ";
+            String s = "Attempt: " + card.player().name + ", " + card + ", position " + position + " - ";
             var condition = deck.put(card);
             if (condition) {
                 s += "SUCCESS";
@@ -244,11 +269,11 @@ public class Table {
      *
      * @param card The card for which the function searches a fitting deck.
      * @return The position of a deck on which a card fits. None is returned if it does not exist.
-     * @throws GameEndedError if the game is already ended.
+     * @throws IllegalTableCallError if the game is already ended.
      */
     Optional<Integer> fittingDeck(Card card) {
-        if (isEnded())
-            throw new GameEndedError();
+        if (state != TableState.ONGOING)
+            throw new IllegalTableCallError(TableState.ONGOING, state);
 
         return decks.stream()
                 .filter(it -> !it.getValue().isCompleted())
@@ -263,11 +288,11 @@ public class Table {
      * @param card     Card to be tested.
      * @param position Position of the deck.
      * @return Boolean representing whether the card fits on the deck.
-     * @throws GameEndedError if the game is already ended.
+     * @throws IllegalTableCallError if the game is already ended.
      */
     boolean fitsPosition(Card card, int position) {
-        if (isEnded())
-            throw new GameEndedError();
+        if (state != TableState.ONGOING)
+            throw new IllegalTableCallError(TableState.ONGOING, state);
 
         var deckOpt = getDeck(position);
         return deckOpt.map(onTableDeck -> onTableDeck.cardFits(card)).orElse(false);
@@ -278,11 +303,11 @@ public class Table {
      *
      * @param position Position of the deck.
      * @return OnTableDeck at the position.
-     * @throws GameEndedError if the game is already ended.
+     * @throws IllegalTableCallError if the game is already ended.
      */
     Optional<OnTableDeck> getDeck(Integer position) {
-        if (isEnded())
-            throw new GameEndedError();
+        if (state != TableState.ONGOING)
+            throw new IllegalTableCallError(TableState.ONGOING, state);
 
         return decks.stream()
                 .filter(it -> Objects.equals(it.getKey(), position))

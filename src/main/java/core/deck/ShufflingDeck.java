@@ -67,6 +67,10 @@ public final class ShufflingDeck {
         }
     }
 
+    public List<Card> getCards() {
+        return cards;
+    }
+
     @Override
     public String toString() {
         return cards.toString();

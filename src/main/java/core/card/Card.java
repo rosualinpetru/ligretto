@@ -4,16 +4,7 @@ import core.entities.Player;
 
 import java.util.Optional;
 
-public class Card {
-    public final CardColour colour;
-    public final CardNumber number;
-    public final Player player;
-
-    public Card(CardColour colour, CardNumber number, Player player) {
-        this.colour = colour;
-        this.number = number;
-        this.player = player;
-    }
+public record Card(CardColour colour, CardNumber number, Player player) {
 
     public boolean isSuccessor(Card card) {
         Optional<CardNumber> next = card.number.next();

@@ -15,6 +15,6 @@ public class Core {
             table.register(new Bot("id" + i, 1000L));
         }
 
-        table.startRound();
+        table.start();
     }
 }

@@ -1,17 +1,9 @@
 package core.entities;
 
 import core.event.CardPlacedEvent;
-import core.exception.GameEndedError;
-
-import java.util.concurrent.Semaphore;
+import core.exception.IllegalTableCallError;
 
 public final class Bot extends Player {
-    /**
-     * We consider that a player can only do one action at a time:
-     * - Shuffle the cards
-     * - Handle new card placement
-     */
-    private final Semaphore semaphore = new Semaphore(1);
 
     private final long delayMilliseconds;
 
@@ -20,30 +12,27 @@ public final class Bot extends Player {
         this.delayMilliseconds = Math.max(0, delayMilliseconds);
     }
 
-    public Bot(String id) {
-        this(id, 0);
-    }
-
     /**
      * A player constantly shuffles the shuffling deck in order to find fitting cards.
      * This shuffles the deck and competes with other threads in placing cards on the table.
      */
     @Override
     public void run() {
-        if (table == null) {
-            System.out.println("The player " + name + " has not joined any table!");
-            return;
-        }
-
         try {
-            while (!table.isEnded() && !Thread.interrupted()) {
+            semaphore.acquire();
+
+            semaphore.release();
+            while (table.getState() != TableState.ENDED && !Thread.interrupted()) {
                 if (!shufflingDeck.isEmpty()) {
 
                     delay();
 
                     semaphore.acquire();
 
-                    //TODO: a bot should not constantly search for 1s. Needs optimisation
+                    /* Can be optimised, yet it is sufficient to simulate an AI
+                        A bot should look for 1s at start and whenever pops a card
+                        from the target deck.
+                     */
                     putFacedUpOnes();
 
                     var cardOpt = shufflingDeck.pick();
@@ -52,7 +41,7 @@ public final class Bot extends Player {
                     }
 
                     var card = cardOpt.get();
-                    if (card.number.isFirst()) {
+                    if (card.number().isFirst()) {
                         table.newDeck(card);
 
                     } else {
@@ -70,19 +59,10 @@ public final class Bot extends Player {
                     shufflingDeck.shuffle();
                     semaphore.release();
 
-                    /* This is very important. Because of time slicing algorithm, each thread can
-                    execute a certain amount of instructions. The problem is that between the Semaphore
-                    release and acquire there is only a jump instruction. This leads to the main bot thread
-                    to constantly acquire the semaphore, without leaving a change for the tasks of the event
-                    bus to be handled. What this means is that shuffling will have a higher priority than
-                    responding to certain updates on the table, which is the exact opposite of how the bot should work,
-                    Thread.yield() instructs that the current thread gives up its processor time, leaving the event
-                    handler to acquire the semaphore.
-                     */
-                    Thread.yield();
                 }
+                Thread.yield();
             }
-        } catch (GameEndedError | InterruptedException ignored) {
+        } catch (IllegalTableCallError | InterruptedException ignored) {
             semaphore.release();
         }
     }
@@ -94,10 +74,17 @@ public final class Bot extends Player {
      */
     void handleCardPlaced(CardPlacedEvent event) {
         try {
-            if (!table.isEnded() && !Thread.interrupted()) {
+            if (table.getState() != TableState.ENDED && !Thread.interrupted()) {
                 semaphore.acquire();
-
                 for (int i = 1; i <= facedUpCards.size(); i++) {
+                    /* Recheck each time if there are cards available in the target deck
+                    before picking a faced up card. Prevents the winner to end the game with less
+                    than 3 faced up cards.
+                     */
+                    if (targetDeck.isEmpty()) {
+                        semaphore.release();
+                        return;
+                    }
                     var cardOpt = facedUpCards.pick(i);
                     if (cardOpt.isEmpty())
                         continue;
@@ -110,7 +97,7 @@ public final class Bot extends Player {
                             facedUpCards.put(i, card);
                             /* The bot attempted to put a card but the deck has been
                             already updated
-                            This means the card has changed and it's not worth
+                            This means the card has changed, and it's not worth
                             investigating during this event handling task */
                             semaphore.release();
                             return;
@@ -121,7 +108,7 @@ public final class Bot extends Player {
                 }
                 semaphore.release();
             }
-        } catch (GameEndedError | InterruptedException ignored) {
+        } catch (IllegalTableCallError | InterruptedException ignored) {
             semaphore.release();
         }
     }
@@ -136,7 +123,7 @@ public final class Bot extends Player {
             if (cardOpt.isEmpty())
                 continue;
             var card = cardOpt.get();
-            if (card.number.isFirst()) {
+            if (card.number().isFirst()) {
                 table.newDeck(card);
                 updateFacedUpCards(i);
             } else {
@@ -147,17 +134,13 @@ public final class Bot extends Player {
 
     /**
      * This function updated the faced up cards by popping a cards from the target deck.
-     * <p>
-     * TODO: The winner ends up with lesser faced up cards than it should.
      */
     private void updateFacedUpCards(int position) {
         var newCard = targetDeck.pop();
+        newCard.ifPresent(card -> facedUpCards.put(position, card));
         if (targetDeck.isEmpty()) {
             table.end(this);
-            return;
         }
-        newCard.ifPresent(card -> facedUpCards.put(position, card));
-
     }
 
     private void delay() throws InterruptedException {
@@ -167,6 +150,7 @@ public final class Bot extends Player {
 
         Thread.sleep(delayMilliseconds);
     }
+
 
     @Override
     public String toString() {
