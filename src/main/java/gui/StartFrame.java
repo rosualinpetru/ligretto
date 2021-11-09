@@ -7,6 +7,9 @@ package gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /**
@@ -49,8 +52,8 @@ public class StartFrame extends JFrame implements ActionListener{
 
         //---- startButton ----
         startButton.setText("Start Game");
-        startButton.setForeground(Color.darkGray);
-        startButton.setBackground(Color.orange);
+        startButton.setForeground(Color.white);
+        startButton.setBackground(Color.decode("0x009933"));
         startButton.addActionListener(this::actionPerformed);
         buttonPanel.add(startButton, BorderLayout.CENTER);
 
@@ -72,8 +75,8 @@ public class StartFrame extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == startButton)
         {
-            ConfigPanel p = new ConfigPanel();
-            this.setContentPane(p);
+            GameSettingsFrame gameSettingsFrame = new GameSettingsFrame();
+            this.setContentPane(gameSettingsFrame.getContentPane());
             this.setVisible(true);
         }
     }

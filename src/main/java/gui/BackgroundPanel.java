@@ -19,8 +19,8 @@ public class BackgroundPanel extends JPanel {
         label = new JLabel("Ligretto");
         label.setVerticalAlignment(JLabel.TOP);
         label.setHorizontalAlignment(JLabel.CENTER);
-        label.setForeground(Color.ORANGE);
-        label.setFont(new Font("MV Boli", Font.BOLD, 56));
+        label.setForeground(Color.decode("0x009933"));
+        label.setFont(new Font("Segoe Print", Font.BOLD, 48));
         add(label, BorderLayout.PAGE_START);
     }
 
