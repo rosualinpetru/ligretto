@@ -48,8 +48,8 @@ public abstract class Player implements Runnable {
         try {
             semaphore.acquire();
             var result = new java.util.ArrayList<>(List.copyOf(facedUpCards.cards().values().stream().toList()));
-            semaphore.release();
             result.addAll(shufflingDeck.getCards());
+            semaphore.release();
             return result.stream();
         } catch (InterruptedException ignored) {
         } finally {

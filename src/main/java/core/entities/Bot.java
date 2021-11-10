@@ -19,9 +19,6 @@ public final class Bot extends Player {
     @Override
     public void run() {
         try {
-            semaphore.acquire();
-
-            semaphore.release();
             while (table.getState() != TableState.ENDED && !Thread.interrupted()) {
                 if (!shufflingDeck.isEmpty()) {
 
