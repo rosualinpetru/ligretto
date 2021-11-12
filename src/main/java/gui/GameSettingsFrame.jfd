@@ -1,0 +1,194 @@
+JFDML JFormDesigner: "7.0.4.0.360" Java: "11.0.12" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			"iconImage": new com.jformdesigner.model.SwingIcon( 0, "/images/logo.png" )
+			"title": "Ligretto - Game Configuration"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "dialogPane"
+				"border": new javax.swing.border.EmptyBorder( 12, 12, 12, 12 )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+					"columns": 4
+					"rows": 6
+				} ) {
+					name: "contentPanel"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label7"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label19"
+						"text": "Game "
+						"font": new java.awt.Font( "Segoe Print", 1, 48 )
+						"foreground": new java.awt.Color( 0, 153, 51, 255 )
+						"horizontalAlignment": 4
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label13"
+						"text": "Settings"
+						"foreground": new java.awt.Color( 0, 153, 51, 255 )
+						"font": new java.awt.Font( "Segoe Print", 1, 48 )
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label25"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label8"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label9"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label10"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label11"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label12"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label14"
+						"text": "Introduce name:"
+						"font": new java.awt.Font( "Segoe Print", 1, 20 )
+						"foreground": new java.awt.Color( 0, 153, 51, 255 )
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+						"rows": 3
+					} ) {
+						name: "panel3"
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label1"
+						} )
+						add( new FormComponent( "javax.swing.JTextField" ) {
+							name: "textField1"
+							"font": new java.awt.Font( "Segoe Print", 0, 16 )
+						} )
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label16"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label17"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label18"
+						"text": "Select shape:"
+						"foreground": new java.awt.Color( 0, 153, 51, 255 )
+						"font": new java.awt.Font( "Segoe Print", 1, 20 )
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+						"rows": 3
+					} ) {
+						name: "panel4"
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label2"
+							"font": new java.awt.Font( "Segoe Print", 0, 16 )
+						} )
+						add( new FormComponent( "javax.swing.JComboBox" ) {
+							name: "comboBox1"
+							"font": new java.awt.Font( "Segoe Print", 0, 16 )
+						} )
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label21"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label22"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label23"
+						"text": "Players number:"
+						"font": new java.awt.Font( "Segoe Print", 1, 20 )
+						"foreground": new java.awt.Color( 0, 153, 51, 255 )
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+						"columns": 4
+					} ) {
+						name: "panel2"
+						add( new FormComponent( "javax.swing.JRadioButton" ) {
+							name: "radioButton2"
+							"text": "3"
+						} )
+						add( new FormComponent( "javax.swing.JRadioButton" ) {
+							name: "radioButton3"
+							"text": "4"
+						} )
+						add( new FormComponent( "javax.swing.JRadioButton" ) {
+							name: "radioButton1"
+							"text": "5"
+						} )
+						add( new FormComponent( "javax.swing.JRadioButton" ) {
+							name: "radioButton4"
+							"text": "6"
+						} )
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label26"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label27"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label28"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label29"
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label30"
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "0, 0:1.0, 0, 80, 80, 0"
+					"$rowSpecs": "0"
+					"$hGap": 5
+					"$vGap": 5
+				} ) {
+					name: "buttonBar"
+					"border": new javax.swing.border.EmptyBorder( 12, 0, 0, 0 )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "startGameButton"
+						"text": "Start Game"
+						"foreground": new java.awt.Color( 0, 153, 51, 255 )
+						"font": new java.awt.Font( "Segoe Print", 1, 16 )
+						"maximumSize": new java.awt.Dimension( 130, 35 )
+						"minimumSize": new java.awt.Dimension( 130, 35 )
+						"preferredSize": new java.awt.Dimension( 130, 35 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 3
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "cancelButton"
+						"text": "Cancel"
+						"foreground": new java.awt.Color( 0, 153, 51, 255 )
+						"font": new java.awt.Font( "Segoe Print", 1, 16 )
+						"maximumSize": new java.awt.Dimension( 130, 35 )
+						"minimumSize": new java.awt.Dimension( 130, 35 )
+						"preferredSize": new java.awt.Dimension( 130, 35 )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 4
+						"gridwidth": 2
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "South"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 880, 660 )
+		} )
+		add( new FormComponent( "javax.swing.JLabel" ) {
+			name: "label3"
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 275, 610 )
+			"size": new java.awt.Dimension( 385, 35 )
+		} )
+	}
+}

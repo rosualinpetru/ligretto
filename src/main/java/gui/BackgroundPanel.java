@@ -5,11 +5,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class BackgroundPanel extends JPanel implements ActionListener {
+public class BackgroundPanel extends JPanel {
 
     private Image image;
     private JLabel label;
-    private JButton startButton;
 
     public BackgroundPanel() {
         setLayout(new BorderLayout());
@@ -20,17 +19,9 @@ public class BackgroundPanel extends JPanel implements ActionListener {
         label = new JLabel("Ligretto");
         label.setVerticalAlignment(JLabel.TOP);
         label.setHorizontalAlignment(JLabel.CENTER);
-        label.setForeground(Color.ORANGE);
-        label.setFont(new Font("MV Boli", Font.BOLD, 56));
+        label.setForeground(Color.decode("0x009933"));
+        label.setFont(new Font("Segoe Print", Font.BOLD, 48));
         add(label, BorderLayout.PAGE_START);
-
-        startButton = new JButton();
-        startButton.setPreferredSize(new Dimension(40, 40));
-        startButton.setBackground(Color.ORANGE);
-        startButton.setVisible(true);
-        startButton.setText("Start Game");
-        startButton.addActionListener(this);
-        add(startButton, BorderLayout.PAGE_END);
     }
 
     @Override
@@ -40,11 +31,4 @@ public class BackgroundPanel extends JPanel implements ActionListener {
         g.drawImage(this.image, 112, 0, getWidth() - 220, getHeight(), this);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == startButton)
-        {
-            label.setText("A mers");
-        }
-    }
 }

@@ -1,0 +1,65 @@
+JFDML JFormDesigner: "7.0.4.0.360" Java: "11.0.12" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+				"columns": 6
+				"rows": 4
+			} ) {
+				name: "panel1"
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+				"columns": 10
+				"hgap": 4
+			} ) {
+				name: "panel2"
+				"minimumSize": new java.awt.Dimension( 880, 660 )
+				"preferredSize": new java.awt.Dimension( 880, 120 )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label2"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label3"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label6"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "card1Label"
+					"text": "card2"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/BLUE_EIGHT.png" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "card2Label"
+					"text": "card3"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/GREEN_TWO.png" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "card3Label"
+					"text": "shuffle"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/YELLOW_FIVE.png" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label9"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label10"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label1"
+					"text": "buton"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "South"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 955, 585 )
+		} )
+	}
+}
