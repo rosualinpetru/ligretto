@@ -22,7 +22,6 @@ public class ConcurrentEventBus<T> implements EventBus<T> {
     private final Semaphore publishSemaphore = new Semaphore(1);
     private final Semaphore readSemaphore = new Semaphore(0); // initial number of permits !!
 
-    private boolean shouldDispose = false;
     private final Thread readFromQueueThread;
 
     public ConcurrentEventBus() {
@@ -76,14 +75,16 @@ public class ConcurrentEventBus<T> implements EventBus<T> {
         } catch (InterruptedException ignored) {
         }
 
-        shouldDispose = true;
         readFromQueueThread.interrupt();
-        pool.shutdownNow();
+        pool.shutdown();
+        while (!pool.isTerminated()) {
+
+        }
     }
 
     private void readFromQueue() {
         try {
-            while (!shouldDispose) {
+            while (!Thread.interrupted()) {
                 readSemaphore.acquire(); // wait until there are events to be read from the queue
 
                 publishSemaphore.acquire();

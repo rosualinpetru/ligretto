@@ -12,16 +12,9 @@ public class Core {
         // Each bot need to be registered to a table
         int NR_OF_PLAYERS = 5;
         for (int i = 0; i < NR_OF_PLAYERS; i++) {
-            table.register(new Bot("id" + i));
+            table.register(new Bot("id" + i, 1000L));
         }
 
-        // The round also starts in a different thread from the main.
-        var tableThread = new Thread(table);
-        tableThread.setName("round1");
-        tableThread.start();
-        tableThread.join();
-        table.score();
-        table.state();
-
+        table.start();
     }
 }

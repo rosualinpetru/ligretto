@@ -1,4 +1,4 @@
-package util;
+package core.util;
 
 import core.card.Card;
 import core.card.CardColour;
@@ -52,11 +52,6 @@ public class DeckShuffler {
 
         var targetDeck = new Stack<Card>();
         targetDeck.addAll(targetDeckList);
-
-        System.out.println(facedUpCards);
-        System.out.println(targetDeck);
-        System.out.println(shufflingDeck);
-        System.out.println();
 
         return Triplet.with(new FacedUpCards(facedUpCards), new TargetDeck(targetDeck), new ShufflingDeck(shufflingDeck));
     }

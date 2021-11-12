@@ -43,6 +43,17 @@ public record FacedUpCards(Map<Integer, Card> cards) {
         return Optional.of(card);
     }
 
+    /**
+     * @return Boolean representing whether there are N cards faced up.
+     */
+    public boolean areAllPlaced() {
+        for(int i = 1; i<= size(); i++) {
+            if(!cards.containsKey(i))
+                return false;
+        }
+        return true;
+    }
+
     public int size() {
         return cards.size();
     }

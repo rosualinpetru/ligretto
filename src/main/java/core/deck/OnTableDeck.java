@@ -74,7 +74,7 @@ public class OnTableDeck {
         readLock.lock();
         try {
             assert cards.peek() != null;
-            return cards.peek().number.isLast();
+            return cards.peek().number().isLast();
         } finally {
             readLock.unlock();
         }
