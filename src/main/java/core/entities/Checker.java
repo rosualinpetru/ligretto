@@ -5,6 +5,7 @@ import core.deck.OnTableDeck;
 
 import java.time.Duration;
 import java.time.OffsetTime;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Checker implements Runnable {
@@ -14,6 +15,7 @@ public class Checker implements Runnable {
     //TODO: Update the countdown_duration and delays after inserting the human thread
     private final Duration COUNTDOWN_DURATION = Duration.ofSeconds(5);
     private final Table table;
+    private final AtomicBoolean shouldEndGame = new AtomicBoolean(false);
 
     public Checker(Table table) {
         this.table = table;
@@ -28,8 +30,9 @@ public class Checker implements Runnable {
                 lock.unlock();
 
                 if (duration.compareTo(COUNTDOWN_DURATION) > 0) {
-                    var isTie = checkGameForTie();
-                    if (isTie) {
+                    table.pause();
+
+                    if (shouldEndGame.get()) {
                         table.end(null);
                         return;
                     }
@@ -38,7 +41,6 @@ public class Checker implements Runnable {
                 }
             }
         }
-
     }
 
     public void setTimestamp(OffsetTime timestamp) {
@@ -47,16 +49,18 @@ public class Checker implements Runnable {
         lock.unlock();
     }
 
-    private boolean checkGameForTie() {
-        table.pause();
+    public void checkGameForTie() {
+        System.out.println("Checking for tie...");
         var tableData = table.getAllData();
         for (OnTableDeck deck : tableData.placedDecks()) {
             for (Card card : tableData.visibleCards()) {
-                if (deck.cardFits(card))
-                    return false;
+                if (deck.cardFits(card)) {
+                    shouldEndGame.set(false);
+                    return;
+                }
             }
         }
 
-        return true;
+        shouldEndGame.set(true);
     }
 }
