@@ -14,7 +14,7 @@ public class BackgroundPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.white);
 
-        this.image = new ImageIcon(getClass().getResource("/images/background.jpg")).getImage();
+        this.image = new ImageIcon(getClass().getResource("/images/bgnd.jpg")).getImage();
 
         label = new JLabel("Ligretto");
         label.setVerticalAlignment(JLabel.TOP);
