@@ -37,21 +37,21 @@ public class GameSettingsFrame extends JFrame {
         label14 = new JLabel();
         panel3 = new JPanel();
         label1 = new JLabel();
-        textField1 = new JTextField();
+        nameField = new JTextField();
         label16 = new JLabel();
         label17 = new JLabel();
         label18 = new JLabel();
         panel4 = new JPanel();
         label2 = new JLabel();
-        comboBox1 = new JComboBox();
+        shapeComboBox = new JComboBox();
         label21 = new JLabel();
         label22 = new JLabel();
         label23 = new JLabel();
         panel2 = new JPanel();
-        radioButton2 = new JRadioButton();
         radioButton3 = new JRadioButton();
-        radioButton1 = new JRadioButton();
         radioButton4 = new JRadioButton();
+        radioButton5 = new JRadioButton();
+        radioButton6 = new JRadioButton();
         label26 = new JLabel();
         label27 = new JLabel();
         label28 = new JLabel();
@@ -64,6 +64,7 @@ public class GameSettingsFrame extends JFrame {
         //======== this ========
         setIconImage(new ImageIcon(getClass().getResource("/images/logo.png")).getImage());
         setTitle("Ligretto - Game Configuration");
+        setVisible(true);
         var contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
@@ -107,9 +108,9 @@ public class GameSettingsFrame extends JFrame {
                     panel3.setLayout(new GridLayout(3, 0));
                     panel3.add(label1);
 
-                    //---- textField1 ----
-                    textField1.setFont(new Font("Segoe Print", Font.PLAIN, 16));
-                    panel3.add(textField1);
+                    //---- nameField ----
+                    nameField.setFont(new Font("Segoe Print", Font.PLAIN, 16));
+                    panel3.add(nameField);
                 }
                 contentPanel.add(panel3);
                 contentPanel.add(label16);
@@ -129,15 +130,9 @@ public class GameSettingsFrame extends JFrame {
                     label2.setFont(new Font("Segoe Print", Font.PLAIN, 16));
                     panel4.add(label2);
 
-                    //---- comboBox1 ----
-                    comboBox1.setFont(new Font("Segoe Print", Font.PLAIN, 16));
-                    comboBox1.addItem("circle");
-                    comboBox1.addItem("square");
-                    comboBox1.addItem("triangle");
-                    comboBox1.addItem("diamond");
-                    comboBox1.addItem("star");
-                    comboBox1.addItem("spiral");
-                    panel4.add(comboBox1);
+                    //---- shapeComboBox ----
+                    shapeComboBox.setFont(new Font("Segoe Print", Font.PLAIN, 16));
+                    panel4.add(shapeComboBox);
                 }
                 contentPanel.add(panel4);
                 contentPanel.add(label21);
@@ -153,21 +148,22 @@ public class GameSettingsFrame extends JFrame {
                 {
                     panel2.setLayout(new GridLayout(1, 4));
 
-                    //---- radioButton2 ----
-                    radioButton2.setText("3");
-                    panel2.add(radioButton2);
-
                     //---- radioButton3 ----
-                    radioButton3.setText("4");
+                    radioButton3.setText("3");
+                    radioButton3.setSelected(true);
                     panel2.add(radioButton3);
 
-                    //---- radioButton1 ----
-                    radioButton1.setText("5");
-                    panel2.add(radioButton1);
-
                     //---- radioButton4 ----
-                    radioButton4.setText("6");
+                    radioButton4.setText("4");
                     panel2.add(radioButton4);
+
+                    //---- radioButton5 ----
+                    radioButton5.setText("5");
+                    panel2.add(radioButton5);
+
+                    //---- radioButton6 ----
+                    radioButton6.setText("6");
+                    panel2.add(radioButton6);
                 }
                 contentPanel.add(panel2);
                 contentPanel.add(label26);
@@ -219,21 +215,21 @@ public class GameSettingsFrame extends JFrame {
     private JLabel label14;
     private JPanel panel3;
     private JLabel label1;
-    private JTextField textField1;
+    private JTextField nameField;
     private JLabel label16;
     private JLabel label17;
     private JLabel label18;
     private JPanel panel4;
     private JLabel label2;
-    private JComboBox comboBox1;
+    private JComboBox shapeComboBox;
     private JLabel label21;
     private JLabel label22;
     private JLabel label23;
     private JPanel panel2;
-    private JRadioButton radioButton2;
     private JRadioButton radioButton3;
-    private JRadioButton radioButton1;
     private JRadioButton radioButton4;
+    private JRadioButton radioButton5;
+    private JRadioButton radioButton6;
     private JLabel label26;
     private JLabel label27;
     private JLabel label28;
@@ -251,5 +247,67 @@ public class GameSettingsFrame extends JFrame {
                 consumer.accept(e);
             }
         });
+    }
+
+    public void setRadioButton3ClickEventListener(Consumer<MouseEvent> consumer) {
+        radioButton3.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                consumer.accept(e);
+            }
+        });
+    }
+
+    public void setRadioButton4ClickEventListener(Consumer<MouseEvent> consumer) {
+        radioButton4.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                consumer.accept(e);
+            }
+        });
+    }
+
+    public void setRadioButton5ClickEventListener(Consumer<MouseEvent> consumer) {
+        radioButton5.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                consumer.accept(e);
+            }
+        });
+    }
+
+    public void setRadioButton6ClickEventListener(Consumer<MouseEvent> consumer) {
+        radioButton6.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                consumer.accept(e);
+            }
+        });
+    }
+
+    public String getComboBoxSelectedItem() {
+        return shapeComboBox.getSelectedItem().toString();
+    }
+
+    public String getNamFieldContent() {
+        return nameField.getText().toString();
+    }
+
+    public void addItemsToShapeComboBox() {
+        shapeComboBox.addItem("circle");
+        shapeComboBox.addItem("square");
+        shapeComboBox.addItem("triangle");
+        shapeComboBox.addItem("diamond");
+        shapeComboBox.addItem("star");
+        shapeComboBox.addItem("trapeze");
+    }
+
+    public void createRadioButtonGroup()
+    {
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(radioButton3);
+        buttonGroup.add(radioButton4);
+        buttonGroup.add(radioButton5);
+        buttonGroup.add(radioButton6);
     }
 }

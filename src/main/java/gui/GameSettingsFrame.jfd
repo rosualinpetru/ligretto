@@ -7,6 +7,7 @@ new FormModel {
 			name: "this"
 			"iconImage": new com.jformdesigner.model.SwingIcon( 0, "/images/logo.png" )
 			"title": "Ligretto - Game Configuration"
+			"visible": true
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 				name: "dialogPane"
 				"border": new javax.swing.border.EmptyBorder( 12, 12, 12, 12 )
@@ -63,7 +64,7 @@ new FormModel {
 							name: "label1"
 						} )
 						add( new FormComponent( "javax.swing.JTextField" ) {
-							name: "textField1"
+							name: "nameField"
 							"font": new java.awt.Font( "Segoe Print", 0, 16 )
 						} )
 					} )
@@ -88,7 +89,7 @@ new FormModel {
 							"font": new java.awt.Font( "Segoe Print", 0, 16 )
 						} )
 						add( new FormComponent( "javax.swing.JComboBox" ) {
-							name: "comboBox1"
+							name: "shapeComboBox"
 							"font": new java.awt.Font( "Segoe Print", 0, 16 )
 						} )
 					} )
@@ -109,19 +110,20 @@ new FormModel {
 					} ) {
 						name: "panel2"
 						add( new FormComponent( "javax.swing.JRadioButton" ) {
-							name: "radioButton2"
-							"text": "3"
-						} )
-						add( new FormComponent( "javax.swing.JRadioButton" ) {
 							name: "radioButton3"
-							"text": "4"
-						} )
-						add( new FormComponent( "javax.swing.JRadioButton" ) {
-							name: "radioButton1"
-							"text": "5"
+							"text": "3"
+							"selected": true
 						} )
 						add( new FormComponent( "javax.swing.JRadioButton" ) {
 							name: "radioButton4"
+							"text": "4"
+						} )
+						add( new FormComponent( "javax.swing.JRadioButton" ) {
+							name: "radioButton5"
+							"text": "5"
+						} )
+						add( new FormComponent( "javax.swing.JRadioButton" ) {
+							name: "radioButton6"
 							"text": "6"
 						} )
 					} )
