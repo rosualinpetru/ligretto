@@ -6,10 +6,10 @@ import core.card.CardNumber;
 import gui.Board;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 
 public class BoardManager {
 
@@ -49,5 +49,12 @@ public class BoardManager {
     public void putCardAtPosition(Card card, int position) {
         String path = card.colour().name() + "_" + card.number().name();
         board.setImageAtPosition(cardImages.get(path), position - 1);
+    }
+
+    public void showMessageDialog(String s) {
+        JOptionPane.showMessageDialog(board,
+                s,
+                "Game Over",
+                JOptionPane.PLAIN_MESSAGE);
     }
 }

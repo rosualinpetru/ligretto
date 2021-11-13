@@ -85,10 +85,13 @@ public class Table {
                 }
             });
             eventBus.dispose();
-            if (winner != null)
+            if (winner != null) {
                 System.out.println(winner.name + " WINS!");
-            else
+                boardManager.showMessageDialog( winner.name + " WINS!");
+            } else {
                 System.out.println("TIE!");
+                boardManager.showMessageDialog("TIE");
+            }
             score();
             state();
         }
