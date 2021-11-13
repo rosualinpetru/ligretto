@@ -13,6 +13,8 @@ import org.javatuples.Pair;
 import java.time.OffsetTime;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.Phaser;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -31,6 +33,9 @@ public class Table {
 
     private final AtomicInteger decksCounter = new AtomicInteger();
     private volatile TableState state = TableState.INITIALIZING;
+    private final Semaphore stateSemaphore = new Semaphore(1);
+
+    public Phaser pauseGamePhaser;
 
     private BoardManager boardManager;
 
@@ -94,6 +99,10 @@ public class Table {
         private void score() {
             players.stream()
                     .map(player -> {
+                        if (endCopy == null) {
+                            // todo check why is null
+                            endCopy = new HashSet<>(decks);
+                        }
                         var score = endCopy.stream()
                                 .flatMap(entry -> entry.getValue().getAll().stream())
                                 .filter(card -> card.player().equals(player))
@@ -156,6 +165,15 @@ public class Table {
         if (state != TableState.INITIALIZING)
             throw new IllegalTableCallError(TableState.INITIALIZING, state);
 
+        // 1 =  checker
+        pauseGamePhaser = new Phaser(players.size() + 1) {
+            @Override
+            protected boolean onAdvance(int phase, int registeredParties) {
+                checker.checkGameForTie();
+                return super.onAdvance(phase, registeredParties);
+            }
+        };
+
         state = TableState.ONGOING;
         botThreads.clear();
         players.forEach(it -> {
@@ -194,13 +212,26 @@ public class Table {
      * available to the checker.
      */
     void pause() {
+        try {
+            stateSemaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         state = TableState.PAUSED;
+        stateSemaphore.release();
+
+        pauseGamePhaser.arriveAndAwaitAdvance();
     }
 
     void resume() {
+        try {
+            stateSemaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         state = TableState.ONGOING;
+        stateSemaphore.release();
     }
-
 
     public TableData getAllData() {
         var visibleCards = players.stream().flatMap(Player::getVisibleCards).toList();
@@ -219,7 +250,16 @@ public class Table {
         if (state != TableState.ONGOING && state != TableState.PAUSED)
             throw new IllegalTableCallError(TableState.ONGOING, state);
 
+        try {
+            stateSemaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         state = TableState.ENDED;
+        stateSemaphore.release();
+
+        pauseGamePhaser.forceTermination();
+
         endCopy = new HashSet<>(decks);
         botThreads.forEach(Thread::interrupt);
         winner = player;

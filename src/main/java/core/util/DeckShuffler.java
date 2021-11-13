@@ -3,10 +3,10 @@ package core.util;
 import core.card.Card;
 import core.card.CardColour;
 import core.card.CardNumber;
-import core.entities.Player;
 import core.deck.FacedUpCards;
 import core.deck.ShufflingDeck;
 import core.deck.TargetDeck;
+import core.entities.Player;
 import org.javatuples.Triplet;
 
 import java.util.*;
