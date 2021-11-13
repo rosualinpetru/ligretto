@@ -1,6 +1,7 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
@@ -39,11 +40,15 @@ public class EndFrame extends JFrame{
         };
 
         // Column Names
-        String[] columnNames = { "Username", "Last Round", "Total" };
+        String[] columnNames = { "Username", "Current Round", "Total" };
 
         // Initializing the JTable
         j = new JTable(data, columnNames);
         j.setBounds(30, 40, 200, 300);
+        j.setFont(new Font("Segoe Print", Font.BOLD, 16));
+        j.getTableHeader().setFont(new Font("Segoe Print", Font.BOLD, 24));
+        j.getTableHeader().setForeground(new Color(0, 153, 51));
+        j.setRowHeight(30);
 
         // adding it to JScrollPane
         JScrollPane sp = new JScrollPane(j);
@@ -62,10 +67,10 @@ public class EndFrame extends JFrame{
 
         nextRound.setText("Next Round");
         nextRound.setForeground(new Color(0, 153, 51));
-        nextRound.setFont(new Font("Segoe Print", Font.BOLD, 10));
-        nextRound.setMaximumSize(new Dimension(100, 35));
-        nextRound.setMinimumSize(new Dimension(100, 35));
-        nextRound.setPreferredSize(new Dimension(100, 35));
+        nextRound.setFont(new Font("Segoe Print", Font.BOLD, 20));
+        nextRound.setMaximumSize(new Dimension(160, 50));
+        nextRound.setMinimumSize(new Dimension(160, 50));
+        nextRound.setPreferredSize(new Dimension(160, 50));
         nextRound.addActionListener(this::actionPerformed);
 
         panelButtons.add(nextRound);
@@ -73,17 +78,17 @@ public class EndFrame extends JFrame{
 
         endGame.setText("End Game");
         endGame.setForeground(new Color(0, 153, 51));
-        endGame.setFont(new Font("Segoe Print", Font.BOLD, 10));
-        endGame.setMaximumSize(new Dimension(100, 35));
-        endGame.setMinimumSize(new Dimension(100, 35));
-        endGame.setPreferredSize(new Dimension(100, 35));
+        endGame.setFont(new Font("Segoe Print", Font.BOLD, 20));
+        endGame.setMaximumSize(new Dimension(160, 50));
+        endGame.setMinimumSize(new Dimension(160, 50));
+        endGame.setPreferredSize(new Dimension(160, 50));
         endGame.addActionListener(this::actionPerformed);
 
         panelButtons.add(endGame);
 
         p.add(panelButtons);
         f.add(p);
-        f.setSize(600, 240);
+        f.setSize(880, 660);
     }
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == endGame)
