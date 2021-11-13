@@ -4,6 +4,9 @@
 
 package gui;
 
+import gui.managers.PairConsumer;
+import org.javatuples.Pair;
+
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -32,7 +35,7 @@ public class Board extends JFrame {
         label9 = new JLabel();
         panel3 = new JPanel();
         label4 = new JLabel();
-        button1 = new JButton();
+        pauseButton = new JButton();
 
         //======== this ========
         setVisible(true);
@@ -85,11 +88,11 @@ public class Board extends JFrame {
                 panel3.setLayout(new GridLayout(3, 1));
                 panel3.add(label4);
 
-                //---- button1 ----
-                button1.setText("Pause");
-                button1.setFont(new Font("Segoe Print", Font.BOLD, 14));
-                button1.setForeground(new Color(0, 153, 51));
-                panel3.add(button1);
+                //---- pauseButton ----
+                pauseButton.setText("Pause");
+                pauseButton.setFont(new Font("Segoe Print", Font.BOLD, 18));
+                pauseButton.setForeground(new Color(0, 153, 51));
+                panel3.add(pauseButton);
             }
             playerCardsGrid.add(panel3);
         }
@@ -113,7 +116,7 @@ public class Board extends JFrame {
     private JLabel label9;
     private JPanel panel3;
     private JLabel label4;
-    private JButton button1;
+    private JButton pauseButton;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
     public void setCard1(Image image) {
@@ -180,10 +183,31 @@ public class Board extends JFrame {
         });
     }
 
+    public void setPauseButtonClickEventListener(Consumer<MouseEvent> consumer) {
+        shuffle.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                consumer.accept(e);
+            }
+        });
+    }
+
     public void addLabels() {
         for (int i = 0; i < 24; i++) {
             boardGrid.add(new JLabel());
         }
         pack();
+    }
+
+    public void setDeckClickEventListener(PairConsumer<Integer, MouseEvent> consumer) {
+        for (int i = 0; i < 24; i++) {
+            int finalI = i + 1;
+            boardGrid.getComponent(i).addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    consumer.accept(finalI, e);
+                }
+            });
+        }
     }
 }

@@ -65,9 +65,9 @@ new FormModel {
 						name: "label4"
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
-						name: "button1"
+						name: "pauseButton"
 						"text": "Pause"
-						"font": new java.awt.Font( "Segoe Print", 1, 14 )
+						"font": new java.awt.Font( "Segoe Print", 1, 18 )
 						"foreground": new java.awt.Color( 0, 153, 51, 255 )
 					} )
 				} )

@@ -7,7 +7,7 @@ import core.exception.IllegalTableCallError;
 import events.EventBus;
 import events.impl.ConcurrentEventBus;
 import events.impl.EventListener;
-import gui.BoardManager;
+import gui.managers.BoardManager;
 import org.javatuples.Pair;
 
 import java.time.OffsetTime;

@@ -1,9 +1,9 @@
-package gui;
+package gui.managers;
 
 import core.card.Card;
 import core.card.CardColour;
 import core.card.CardNumber;
-import main.Main;
+import gui.Board;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -45,9 +45,9 @@ public class BoardManager {
         return img;
     }
 
+    //todo difference between console final table status and board frame
     public void putCardAtPosition(Card card, int position) {
-        position--;
         String path = card.colour().name() + "_" + card.number().name();
-        board.setImageAtPosition(cardImages.get(path), position);
+        board.setImageAtPosition(cardImages.get(path), position - 1);
     }
 }
