@@ -2,6 +2,7 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class EndFrame extends JFrame{
     // frame
@@ -65,6 +66,7 @@ public class EndFrame extends JFrame{
         nextRound.setMaximumSize(new Dimension(100, 35));
         nextRound.setMinimumSize(new Dimension(100, 35));
         nextRound.setPreferredSize(new Dimension(100, 35));
+        nextRound.addActionListener(this::actionPerformed);
 
         panelButtons.add(nextRound);
         panelButtons.add(Box.createRigidArea(new Dimension(100, 0)));
@@ -75,12 +77,26 @@ public class EndFrame extends JFrame{
         endGame.setMaximumSize(new Dimension(100, 35));
         endGame.setMinimumSize(new Dimension(100, 35));
         endGame.setPreferredSize(new Dimension(100, 35));
+        endGame.addActionListener(this::actionPerformed);
 
         panelButtons.add(endGame);
 
         p.add(panelButtons);
         f.add(p);
         f.setSize(600, 240);
+    }
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == endGame)
+        {
+            f.dispose();
+        }
+        if(e.getSource() == nextRound)
+        {
+            Board board = new Board();
+            this.setContentPane(board.getContentPane());
+            this.setVisible(true);
+            f.dispose();
+        }
     }
 
 }
