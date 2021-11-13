@@ -78,6 +78,23 @@ public class StartFrame extends JFrame implements ActionListener{
             GameSettingsFrame gameSettingsFrame = new GameSettingsFrame();
             this.setContentPane(gameSettingsFrame.getContentPane());
             this.setVisible(true);
+
+            //            Masa masa = new Masa();
+//            BufferedImage img = null;
+//            try{
+//                img = ImageIO.read(getClass().getResource("/images/cards/BLUE_ONE.png"));
+//            }catch(IOException ex)
+//            {
+//                ex.printStackTrace();
+//            }
+//            masa.setCard1(img);
+//
+//            masa.setCard1ClickEventListener(event->{
+//                System.out.println(event);
+//            });
+//
+//            this.setContentPane(masa.getContentPane());
+//            this.setVisible(true);
         }
     }
 

@@ -1,12 +1,13 @@
 package core.entities;
 
-import core.exception.IllegalTableCallError;
-import events.EventBus;
 import core.card.Card;
 import core.deck.OnTableDeck;
 import core.event.CardPlacedEvent;
+import core.exception.IllegalTableCallError;
+import events.EventBus;
 import events.impl.ConcurrentEventBus;
 import events.impl.EventListener;
+import gui.BoardManager;
 import org.javatuples.Pair;
 
 import java.time.OffsetTime;
@@ -30,6 +31,8 @@ public class Table {
 
     private final AtomicInteger decksCounter = new AtomicInteger();
     private volatile TableState state = TableState.INITIALIZING;
+
+    private BoardManager boardManager;
 
     /**
      * Although expensive, it allows both reads and written on all
@@ -55,6 +58,11 @@ public class Table {
         eventBus.registerListener(listener);
     }
 
+    public Table(BoardManager boardManager) {
+        this();
+        this.boardManager = boardManager;
+    }
+
     /* ======== THREAD ======== */
     private class TableThread implements Runnable {
         /**
@@ -72,7 +80,7 @@ public class Table {
                 }
             });
             eventBus.dispose();
-            if(winner != null)
+            if (winner != null)
                 System.out.println(winner.name + " WINS!");
             else
                 System.out.println("TIE!");
@@ -230,6 +238,9 @@ public class Table {
         OnTableDeck deck = new OnTableDeck(card);
         var counter = decksCounter.incrementAndGet();
         decks.add(Map.entry(counter, deck));
+
+        boardManager.putCardAtPosition(card, counter);
+
         eventBus.publish(new CardPlacedEvent(counter));
         System.out.println("New deck: " + card + ", position " + counter);
     }
@@ -254,6 +265,7 @@ public class Table {
             var condition = deck.put(card);
             if (condition) {
                 s += "SUCCESS";
+                boardManager.putCardAtPosition(card, position);
                 eventBus.publish(new CardPlacedEvent(position));
             } else {
                 s += "FAILURE";
