@@ -13,6 +13,7 @@ import java.util.Objects;
 public class Main {
     public static void main(String[] args) throws InterruptedException {
 
+//        EndFrame endFrame = new EndFrame();
         Board board = new Board();
         board.addLabels();
 
@@ -21,19 +22,19 @@ public class Main {
         board.setCard3(getBufferedImage("BLUE_TEN"));
         board.setShuffle(getBufferedImage("BLUE_TEN"));
 
-        board.setCard1ClickEventListener(e->{
+        board.setCard1ClickEventListener(e -> {
             System.out.println("Card1 was clicked");
         });
 
-        board.setCard2ClickEventListener(e->{
+        board.setCard2ClickEventListener(e -> {
             System.out.println("Card2 was clicked");
         });
 
-        board.setCard3ClickEventListener(e->{
+        board.setCard3ClickEventListener(e -> {
             System.out.println("Card3 was clicked");
         });
 
-        board.setShuffleClickEventListener(e->{
+        board.setShuffleClickEventListener(e -> {
             System.out.println("Shuffle was clicked");
         });
 
