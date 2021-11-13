@@ -106,8 +106,8 @@ public class EndFrame extends JFrame {
             f.dispose();
         }
         if (e.getSource() == nextRound) {
-            Board board = new Board();
-            this.setContentPane(board.getContentPane());
+            BoardFrame boardFrame = new BoardFrame();
+            this.setContentPane(boardFrame.getContentPane());
             this.setVisible(true);
             f.dispose();
         }

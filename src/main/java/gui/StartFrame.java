@@ -4,24 +4,32 @@
 
 package gui;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import javax.imageio.ImageIO;
+import gui.managers.FrameManager;
+
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.function.Consumer;
 
 /**
  * @author Tania Topciov
  */
-public class StartFrame extends JFrame implements ActionListener{
+public class StartFrame extends JFrame {
 
     JButton startButton;
     JPanel buttonPanel;
-    ConfigPanel config;
+    private FrameManager frameManager;
+
     public StartFrame() {
         initComponents();
+
+        frameManager = FrameManager.getInstance();
+        frameManager.setCurrentFrame(this);
+
+        setStartButtonClickEventListener(e -> {
+            frameManager.switchToGameSettingsFrame();
+        });
     }
 
     private void initComponents() {
@@ -54,7 +62,7 @@ public class StartFrame extends JFrame implements ActionListener{
         startButton.setText("Start Game");
         startButton.setForeground(Color.white);
         startButton.setBackground(Color.decode("0x009933"));
-        startButton.addActionListener(this::actionPerformed);
+//        startButton.addActionListener(this::actionPerformed);
         buttonPanel.add(startButton, BorderLayout.CENTER);
 
         contentPane.add(buttonPanel, BorderLayout.SOUTH);
@@ -71,14 +79,13 @@ public class StartFrame extends JFrame implements ActionListener{
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     private BackgroundPanel backgroundPanel1;
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == startButton)
-        {
-            GameSettingsFrame gameSettingsFrame = new GameSettingsFrame();
-            this.setContentPane(gameSettingsFrame.getContentPane());
-            this.setVisible(true);
-        }
+    public void setStartButtonClickEventListener(Consumer<MouseEvent> consumer) {
+        startButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                consumer.accept(e);
+            }
+        });
     }
 
     // JFormDesigner - End of variables declaration  //GEN-END:variables

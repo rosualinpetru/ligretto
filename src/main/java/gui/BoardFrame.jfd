@@ -61,8 +61,9 @@ new FormModel {
 					"rows": 3
 				} ) {
 					name: "panel3"
-					add( new FormComponent( "javax.swing.JLabel" ) {
-						name: "label4"
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "playButton"
+						"text": "Play"
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "pauseButton"

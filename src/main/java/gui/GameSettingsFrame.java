@@ -4,12 +4,20 @@
 
 package gui;
 
+import core.entities.Bot;
+import core.entities.Table;
+import gui.managers.BoardManager;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
 import java.util.function.Consumer;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -19,6 +27,8 @@ import javax.swing.border.*;
 public class GameSettingsFrame extends JFrame {
     public GameSettingsFrame() {
         initComponents();
+        createRadioButtonGroup();
+        addItemsToShapeComboBox();
     }
 
     private void initComponents() {
@@ -64,7 +74,6 @@ public class GameSettingsFrame extends JFrame {
         //======== this ========
         setIconImage(new ImageIcon(getClass().getResource("/images/logo.png")).getImage());
         setTitle("Ligretto - Game Configuration");
-        setVisible(true);
         var contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 

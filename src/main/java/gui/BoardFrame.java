@@ -18,8 +18,8 @@ import javax.swing.border.*;
 /**
  * @author Tania Topciov
  */
-public class Board extends JFrame {
-    public Board() {
+public class BoardFrame extends JFrame {
+    public BoardFrame() {
         initComponents();
     }
 
@@ -35,7 +35,7 @@ public class Board extends JFrame {
         shuffle = new JLabel();
         label9 = new JLabel();
         panel3 = new JPanel();
-        label4 = new JLabel();
+        playButton = new JButton();
         pauseButton = new JButton();
 
         //======== this ========
@@ -87,7 +87,10 @@ public class Board extends JFrame {
             //======== panel3 ========
             {
                 panel3.setLayout(new GridLayout(3, 1));
-                panel3.add(label4);
+
+                //---- playButton ----
+                playButton.setText("Play");
+                panel3.add(playButton);
 
                 //---- pauseButton ----
                 pauseButton.setText("Pause");
@@ -116,7 +119,7 @@ public class Board extends JFrame {
     private JLabel shuffle;
     private JLabel label9;
     private JPanel panel3;
-    private JLabel label4;
+    private JButton playButton;
     private JButton pauseButton;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
@@ -185,7 +188,16 @@ public class Board extends JFrame {
     }
 
     public void setPauseButtonClickEventListener(Consumer<MouseEvent> consumer) {
-        shuffle.addMouseListener(new MouseAdapter() {
+        pauseButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                consumer.accept(e);
+            }
+        });
+    }
+
+    public void setPlayButtonClickEventListener(Consumer<MouseEvent> consumer) {
+        playButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 consumer.accept(e);
