@@ -7,6 +7,7 @@ import core.exception.IllegalTableCallError;
 import events.EventBus;
 import events.impl.ConcurrentEventBus;
 import events.impl.EventListener;
+import gui.managers.BoardManager;
 import org.javatuples.Pair;
 
 import java.time.OffsetTime;
@@ -36,6 +37,8 @@ public class Table {
 
     public Phaser pauseGamePhaser;
 
+    private BoardManager boardManager;
+
     /**
      * Although expensive, it allows both reads and written on all
      * decks to happen concurrently.
@@ -58,6 +61,11 @@ public class Table {
         var listener = new EventListener<CardPlacedEvent>();
         listener.subscribe(event -> checker.setTimestamp(OffsetTime.now()));
         eventBus.registerListener(listener);
+    }
+
+    public Table(BoardManager boardManager) {
+        this();
+        this.boardManager = boardManager;
     }
 
     /* ======== THREAD ======== */
@@ -270,6 +278,9 @@ public class Table {
         OnTableDeck deck = new OnTableDeck(card);
         var counter = decksCounter.incrementAndGet();
         decks.add(Map.entry(counter, deck));
+
+        boardManager.putCardAtPosition(card, counter);
+
         eventBus.publish(new CardPlacedEvent(counter));
         System.out.println("New deck: " + card + ", position " + counter);
     }
@@ -294,6 +305,7 @@ public class Table {
             var condition = deck.put(card);
             if (condition) {
                 s += "SUCCESS";
+                boardManager.putCardAtPosition(card, position);
                 eventBus.publish(new CardPlacedEvent(position));
             } else {
                 s += "FAILURE";

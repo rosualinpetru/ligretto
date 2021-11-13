@@ -7,6 +7,9 @@ package gui;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.function.Consumer;
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -40,7 +43,7 @@ public class GameSettingsFrame extends JFrame {
         label18 = new JLabel();
         panel4 = new JPanel();
         label2 = new JLabel();
-        JComboBox comboBox1 = new JComboBox();
+        comboBox1 = new JComboBox();
         label21 = new JLabel();
         label22 = new JLabel();
         label23 = new JLabel();
@@ -55,8 +58,7 @@ public class GameSettingsFrame extends JFrame {
         label29 = new JLabel();
         label30 = new JLabel();
         buttonBar = new JPanel();
-        startGameButton = new JButton();
-        cancelButton = new JButton();
+        startButton = new JButton();
         label3 = new JLabel();
 
         //======== this ========
@@ -183,27 +185,16 @@ public class GameSettingsFrame extends JFrame {
                 ((GridBagLayout)buttonBar.getLayout()).columnWidths = new int[] {0, 0, 0, 85, 85, 0};
                 ((GridBagLayout)buttonBar.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 0.0, 0.0, 0.0};
 
-                //---- startGameButton ----
-                startGameButton.setText("Start Game");
-                startGameButton.setForeground(new Color(0, 153, 51));
-                startGameButton.setFont(new Font("Segoe Print", Font.BOLD, 16));
-                startGameButton.setMaximumSize(new Dimension(130, 35));
-                startGameButton.setMinimumSize(new Dimension(130, 35));
-                startGameButton.setPreferredSize(new Dimension(130, 35));
-                buttonBar.add(startGameButton, new GridBagConstraints(3, 0, 1, 1, 0.0, 0.0,
+                //---- startButton ----
+                startButton.setText("Start");
+                startButton.setForeground(new Color(0, 153, 51));
+                startButton.setFont(new Font("Segoe Print", Font.BOLD, 18));
+                startButton.setMaximumSize(new Dimension(130, 35));
+                startButton.setMinimumSize(new Dimension(130, 35));
+                startButton.setPreferredSize(new Dimension(130, 35));
+                buttonBar.add(startButton, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 5), 0, 0));
-
-                //---- cancelButton ----
-                cancelButton.setText("Cancel");
-                cancelButton.setForeground(new Color(0, 153, 51));
-                cancelButton.setFont(new Font("Segoe Print", Font.BOLD, 16));
-                cancelButton.setMaximumSize(new Dimension(130, 35));
-                cancelButton.setMinimumSize(new Dimension(130, 35));
-                cancelButton.setPreferredSize(new Dimension(130, 35));
-                buttonBar.add(cancelButton, new GridBagConstraints(4, 0, 2, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                    new Insets(0, 0, 0, 0), 0, 0));
             }
             dialogPane.add(buttonBar, BorderLayout.SOUTH);
         }
@@ -234,6 +225,7 @@ public class GameSettingsFrame extends JFrame {
     private JLabel label18;
     private JPanel panel4;
     private JLabel label2;
+    private JComboBox comboBox1;
     private JLabel label21;
     private JLabel label22;
     private JLabel label23;
@@ -248,8 +240,16 @@ public class GameSettingsFrame extends JFrame {
     private JLabel label29;
     private JLabel label30;
     private JPanel buttonBar;
-    private JButton startGameButton;
-    private JButton cancelButton;
+    private JButton startButton;
     private JLabel label3;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
+
+    public void setStartButtonClickEventListener(Consumer<MouseEvent> consumer) {
+        startButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                consumer.accept(e);
+            }
+        });
+    }
 }

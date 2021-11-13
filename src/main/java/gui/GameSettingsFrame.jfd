@@ -152,27 +152,15 @@ new FormModel {
 					name: "buttonBar"
 					"border": new javax.swing.border.EmptyBorder( 12, 0, 0, 0 )
 					add( new FormComponent( "javax.swing.JButton" ) {
-						name: "startGameButton"
-						"text": "Start Game"
+						name: "startButton"
+						"text": "Start"
 						"foreground": new java.awt.Color( 0, 153, 51, 255 )
-						"font": new java.awt.Font( "Segoe Print", 1, 16 )
-						"maximumSize": new java.awt.Dimension( 130, 35 )
-						"minimumSize": new java.awt.Dimension( 130, 35 )
-						"preferredSize": new java.awt.Dimension( 130, 35 )
-					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-						"gridx": 3
-					} )
-					add( new FormComponent( "javax.swing.JButton" ) {
-						name: "cancelButton"
-						"text": "Cancel"
-						"foreground": new java.awt.Color( 0, 153, 51, 255 )
-						"font": new java.awt.Font( "Segoe Print", 1, 16 )
+						"font": new java.awt.Font( "Segoe Print", 1, 18 )
 						"maximumSize": new java.awt.Dimension( 130, 35 )
 						"minimumSize": new java.awt.Dimension( 130, 35 )
 						"preferredSize": new java.awt.Dimension( 130, 35 )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 4
-						"gridwidth": 2
 					} )
 				}, new FormLayoutConstraints( class java.lang.String ) {
 					"value": "South"
