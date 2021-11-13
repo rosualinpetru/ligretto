@@ -18,50 +18,59 @@ public final class Bot extends Player {
      */
     @Override
     public void run() {
-        try {
-            while (table.getState() != TableState.ENDED && !Thread.interrupted()) {
-                if (!shufflingDeck.isEmpty()) {
+        do {
+            try {
+                while (table.getState() != TableState.ENDED && !Thread.interrupted()) {
+                    if (table.getState() == TableState.PAUSED) {
+                        table.pause();
+                    }
 
-                    delay();
+                    if (!shufflingDeck.isEmpty()) {
 
-                    semaphore.acquire();
+                        delay();
+
+                        semaphore.acquire();
 
                     /* Can be optimised, yet it is sufficient to simulate an AI
                         A bot should look for 1s at start and whenever pops a card
                         from the target deck.
                      */
-                    putFacedUpOnes();
+                        putFacedUpOnes();
 
-                    var cardOpt = shufflingDeck.pick();
-                    if (cardOpt.isEmpty()) {
-                        break;
-                    }
+                        var cardOpt = shufflingDeck.pick();
+                        if (cardOpt.isEmpty()) {
+                            break;
+                        }
 
-                    var card = cardOpt.get();
-                    if (card.number().isFirst()) {
-                        table.newDeck(card);
+                        var card = cardOpt.get();
+                        if (card.number().isFirst()) {
+                            table.newDeck(card);
 
-                    } else {
-                        var fitPositionOpt = table.fittingDeck(card);
-                        if (fitPositionOpt.isPresent()) {
-                            var fitPosition = fitPositionOpt.get();
-                            var successfullyPlacedCard = table.put(card, fitPosition);
-                            if (!successfullyPlacedCard) {
+                        } else {
+                            var fitPositionOpt = table.fittingDeck(card);
+                            if (fitPositionOpt.isPresent()) {
+                                var fitPosition = fitPositionOpt.get();
+                                var successfullyPlacedCard = table.put(card, fitPosition);
+                                if (!successfullyPlacedCard) {
+                                    shufflingDeck.put(card);
+                                }
+                            } else {
                                 shufflingDeck.put(card);
                             }
-                        } else {
-                            shufflingDeck.put(card);
                         }
-                    }
-                    shufflingDeck.shuffle();
-                    semaphore.release();
+                        shufflingDeck.shuffle();
+                        semaphore.release();
 
+                    }
+                    Thread.yield();
                 }
-                Thread.yield();
+            } catch (IllegalTableCallError | InterruptedException ignored) {
+                semaphore.release();
             }
-        } catch (IllegalTableCallError | InterruptedException ignored) {
-            semaphore.release();
-        }
+        } while (table.getState() == TableState.PAUSED);
+
+        table.pauseGamePhaser.arriveAndDeregister();
+        System.out.println(this.name + " - Finished Deck cards");
     }
 
     /**
@@ -72,6 +81,13 @@ public final class Bot extends Player {
     void handleCardPlaced(CardPlacedEvent event) {
         try {
             if (table.getState() != TableState.ENDED && !Thread.interrupted()) {
+
+                if (table.getState() == TableState.PAUSED) {
+                    table.pauseGamePhaser.register();
+                    table.pause();
+                    table.pauseGamePhaser.arriveAndDeregister();
+                }
+
                 semaphore.acquire();
                 for (int i = 1; i <= facedUpCards.size(); i++) {
                     /* Recheck each time if there are cards available in the target deck
