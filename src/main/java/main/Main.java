@@ -3,13 +3,15 @@ package main;
 import events.EventBus;
 import events.impl.ConcurrentEventBus;
 import events.impl.EventListener;
+import gui.EndFrame;
 import gui.StartFrame;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
     public static void main(String[] args) {
-        StartFrame menu = new StartFrame();
+        //StartFrame menu = new StartFrame();
+        EndFrame end = new EndFrame();
     }
 
     private static void eventBusExample() {
