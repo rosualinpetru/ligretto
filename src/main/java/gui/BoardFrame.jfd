@@ -10,6 +10,9 @@ new FormModel {
 			"$sizePolicy": 1
 			"defaultCloseOperation": 3
 			"foreground": sfield java.awt.SystemColor controlText
+			"resizable": false
+			"title": "Ligretto"
+			"iconImage": new com.jformdesigner.model.SwingIcon( 0, "/images/logo.png" )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
 				"columns": 6
 				"rows": 4
@@ -18,6 +21,9 @@ new FormModel {
 			} ) {
 				name: "boardGrid"
 				"border": new javax.swing.border.EmptyBorder( 12, 20, 12, 20 )
+				"maximumSize": new java.awt.Dimension( 880, 520 )
+				"preferredSize": new java.awt.Dimension( 880, 520 )
+				"minimumSize": new java.awt.Dimension( 880, 520 )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "Center"
 			} )
@@ -26,9 +32,10 @@ new FormModel {
 				"hgap": 12
 			} ) {
 				name: "playerCardsGrid"
-				"minimumSize": new java.awt.Dimension( 880, 660 )
+				"minimumSize": new java.awt.Dimension( 880, 120 )
 				"preferredSize": new java.awt.Dimension( 880, 120 )
 				"border": new javax.swing.border.EmptyBorder( 0, 0, 4, 8 )
+				"maximumSize": new java.awt.Dimension( 880, 120 )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label3"
 				} )
@@ -59,17 +66,29 @@ new FormModel {
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
 					"columns": 1
 					"rows": 3
+					"vgap": 10
 				} ) {
 					name: "panel3"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label1"
+					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "playButton"
 						"text": "Play"
+						"font": new java.awt.Font( "Segoe Print", 1, 16 )
+						"foreground": new java.awt.Color( 0, 153, 51, 255 )
+						"maximumSize": new java.awt.Dimension( 100, 35 )
+						"minimumSize": new java.awt.Dimension( 100, 35 )
+						"preferredSize": new java.awt.Dimension( 100, 35 )
 					} )
 					add( new FormComponent( "javax.swing.JButton" ) {
 						name: "pauseButton"
 						"text": "Pause"
-						"font": new java.awt.Font( "Segoe Print", 1, 18 )
+						"font": new java.awt.Font( "Segoe Print", 1, 16 )
 						"foreground": new java.awt.Color( 0, 153, 51, 255 )
+						"maximumSize": new java.awt.Dimension( 100, 40 )
+						"minimumSize": new java.awt.Dimension( 100, 40 )
+						"preferredSize": new java.awt.Dimension( 100, 40 )
 					} )
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {

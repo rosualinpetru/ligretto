@@ -35,6 +35,7 @@ public class BoardFrame extends JFrame {
         shuffle = new JLabel();
         label9 = new JLabel();
         panel3 = new JPanel();
+        label1 = new JLabel();
         playButton = new JButton();
         pauseButton = new JButton();
 
@@ -43,21 +44,28 @@ public class BoardFrame extends JFrame {
         setMinimumSize(new Dimension(880, 660));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setForeground(SystemColor.controlText);
+        setResizable(false);
+        setTitle("Ligretto");
+        setIconImage(new ImageIcon(getClass().getResource("/images/logo.png")).getImage());
         var contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
         //======== boardGrid ========
         {
             boardGrid.setBorder(new EmptyBorder(12, 20, 12, 20));
+            boardGrid.setMaximumSize(new Dimension(880, 520));
+            boardGrid.setPreferredSize(new Dimension(880, 520));
+            boardGrid.setMinimumSize(new Dimension(880, 520));
             boardGrid.setLayout(new GridLayout(4, 6, 40, 12));
         }
         contentPane.add(boardGrid, BorderLayout.CENTER);
 
         //======== playerCardsGrid ========
         {
-            playerCardsGrid.setMinimumSize(new Dimension(880, 660));
+            playerCardsGrid.setMinimumSize(new Dimension(880, 120));
             playerCardsGrid.setPreferredSize(new Dimension(880, 120));
             playerCardsGrid.setBorder(new EmptyBorder(0, 0, 4, 8));
+            playerCardsGrid.setMaximumSize(new Dimension(880, 120));
             playerCardsGrid.setLayout(new GridLayout(1, 10, 12, 0));
             playerCardsGrid.add(label3);
 
@@ -86,16 +94,25 @@ public class BoardFrame extends JFrame {
 
             //======== panel3 ========
             {
-                panel3.setLayout(new GridLayout(3, 1));
+                panel3.setLayout(new GridLayout(3, 1, 0, 10));
+                panel3.add(label1);
 
                 //---- playButton ----
                 playButton.setText("Play");
+                playButton.setFont(new Font("Segoe Print", Font.BOLD, 16));
+                playButton.setForeground(new Color(0, 153, 51));
+                playButton.setMaximumSize(new Dimension(100, 35));
+                playButton.setMinimumSize(new Dimension(100, 35));
+                playButton.setPreferredSize(new Dimension(100, 35));
                 panel3.add(playButton);
 
                 //---- pauseButton ----
                 pauseButton.setText("Pause");
-                pauseButton.setFont(new Font("Segoe Print", Font.BOLD, 18));
+                pauseButton.setFont(new Font("Segoe Print", Font.BOLD, 16));
                 pauseButton.setForeground(new Color(0, 153, 51));
+                pauseButton.setMaximumSize(new Dimension(100, 40));
+                pauseButton.setMinimumSize(new Dimension(100, 40));
+                pauseButton.setPreferredSize(new Dimension(100, 40));
                 panel3.add(pauseButton);
             }
             playerCardsGrid.add(panel3);
@@ -119,6 +136,7 @@ public class BoardFrame extends JFrame {
     private JLabel shuffle;
     private JLabel label9;
     private JPanel panel3;
+    private JLabel label1;
     private JButton playButton;
     private JButton pauseButton;
     // JFormDesigner - End of variables declaration  //GEN-END:variables

@@ -3,12 +3,41 @@ JFDML JFormDesigner: "7.0.4.0.360" Java: "11.0.12" encoding: "UTF-8"
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
-		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class javax.swing.BoxLayout ) ) {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 			name: "this"
 			"visible": true
-			"minimumSize": new java.awt.Dimension( 600, 400 )
+			"minimumSize": new java.awt.Dimension( 880, 620 )
+			"resizable": false
+			"title": "Ligretto"
+			"iconImage": new com.jformdesigner.model.SwingIcon( 0, "/images/logo.png" )
+			"defaultCloseOperation": 3
 			add( new FormComponent( "gui.BackgroundPanel" ) {
 				name: "backgroundPanel1"
+				"maximumSize": new java.awt.Dimension( 880, 600 )
+				"minimumSize": new java.awt.Dimension( 880, 600 )
+				"preferredSize": new java.awt.Dimension( 880, 600 )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) {
+				"hgap": 2
+				"vgap": 2
+			} ) {
+				name: "panel1"
+				add( new FormComponent( "javax.swing.JButton" ) {
+					name: "startButton"
+					"text": "Let's play!"
+					"font": new java.awt.Font( "Segoe Print", 1, 18 )
+					"foreground": sfield java.awt.Color white
+					"background": new java.awt.Color( 0, 153, 51, 255 )
+					"maximumSize": new java.awt.Dimension( 880, 40 )
+					"minimumSize": new java.awt.Dimension( 880, 40 )
+					"preferredSize": new java.awt.Dimension( 880, 40 )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "South"
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )

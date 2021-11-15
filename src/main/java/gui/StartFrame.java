@@ -17,8 +17,6 @@ import java.util.function.Consumer;
  */
 public class StartFrame extends JFrame {
 
-    JButton startButton;
-    JPanel buttonPanel;
     private FrameManager frameManager;
 
     public StartFrame() {
@@ -35,49 +33,50 @@ public class StartFrame extends JFrame {
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         backgroundPanel1 = new BackgroundPanel();
-        buttonPanel = new JPanel();
+        panel1 = new JPanel();
         startButton = new JButton();
 
         //======== this ========
         setVisible(true);
+        setMinimumSize(new Dimension(880, 620));
         setResizable(false);
-        setMinimumSize(new Dimension(880, 660));
-        setMaximumSize(new Dimension(880, 660));
+        setTitle("Ligretto");
+        setIconImage(new ImageIcon(getClass().getResource("/images/logo.png")).getImage());
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         var contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
-        backgroundPanel1.setMaximumSize(new Dimension(880, 640));
-        backgroundPanel1.setMinimumSize(new Dimension(880, 640));
+        //---- backgroundPanel1 ----
+        backgroundPanel1.setMaximumSize(new Dimension(880, 600));
+        backgroundPanel1.setMinimumSize(new Dimension(880, 600));
+        backgroundPanel1.setPreferredSize(new Dimension(880, 600));
         contentPane.add(backgroundPanel1, BorderLayout.CENTER);
 
-        setTitle("Ligretto");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //======== panel1 ========
+        {
+            panel1.setLayout(new BorderLayout(2, 2));
 
-        buttonPanel.setBackground(Color.white);
-        buttonPanel.setMaximumSize(new Dimension(880, 20));
-        buttonPanel.setMinimumSize(new Dimension(880, 20));
-        buttonPanel.setLayout(new BorderLayout(2, 2));
-
-        //---- startButton ----
-        startButton.setText("Start Game");
-        startButton.setForeground(Color.white);
-        startButton.setBackground(Color.decode("0x009933"));
-//        startButton.addActionListener(this::actionPerformed);
-        buttonPanel.add(startButton, BorderLayout.CENTER);
-
-        contentPane.add(buttonPanel, BorderLayout.SOUTH);
-
-        Image frameIcon = new ImageIcon(getClass().getResource("/images/logo.png")).getImage();
-        setIconImage(frameIcon);
-
+            //---- startButton ----
+            startButton.setText("Let's play!");
+            startButton.setFont(new Font("Segoe Print", Font.BOLD, 18));
+            startButton.setForeground(Color.white);
+            startButton.setBackground(new Color(0, 153, 51));
+            startButton.setMaximumSize(new Dimension(880, 40));
+            startButton.setMinimumSize(new Dimension(880, 40));
+            startButton.setPreferredSize(new Dimension(880, 40));
+            panel1.add(startButton, BorderLayout.CENTER);
+        }
+        contentPane.add(panel1, BorderLayout.SOUTH);
         pack();
         setLocationRelativeTo(getOwner());
-
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     private BackgroundPanel backgroundPanel1;
+    private JPanel panel1;
+    private JButton startButton;
+    // JFormDesigner - End of variables declaration  //GEN-END:variables
 
     public void setStartButtonClickEventListener(Consumer<MouseEvent> consumer) {
         startButton.addMouseListener(new MouseAdapter() {
@@ -87,6 +86,4 @@ public class StartFrame extends JFrame {
             }
         });
     }
-
-    // JFormDesigner - End of variables declaration  //GEN-END:variables
 }

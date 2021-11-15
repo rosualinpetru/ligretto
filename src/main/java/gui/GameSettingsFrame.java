@@ -69,17 +69,22 @@ public class GameSettingsFrame extends JFrame {
         label30 = new JLabel();
         buttonBar = new JPanel();
         startButton = new JButton();
-        label3 = new JLabel();
 
         //======== this ========
         setIconImage(new ImageIcon(getClass().getResource("/images/logo.png")).getImage());
         setTitle("Ligretto - Game Configuration");
+        setMinimumSize(new Dimension(880, 660));
+        setResizable(false);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         var contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
         //======== dialogPane ========
         {
             dialogPane.setBorder(new EmptyBorder(12, 12, 12, 12));
+            dialogPane.setMaximumSize(new Dimension(880, 640));
+            dialogPane.setMinimumSize(new Dimension(880, 640));
+            dialogPane.setPreferredSize(new Dimension(880, 640));
             dialogPane.setLayout(new BorderLayout());
 
             //======== contentPanel ========
@@ -193,10 +198,10 @@ public class GameSettingsFrame extends JFrame {
                 //---- startButton ----
                 startButton.setText("Start");
                 startButton.setForeground(new Color(0, 153, 51));
-                startButton.setFont(new Font("Segoe Print", Font.BOLD, 18));
-                startButton.setMaximumSize(new Dimension(130, 35));
-                startButton.setMinimumSize(new Dimension(130, 35));
-                startButton.setPreferredSize(new Dimension(130, 35));
+                startButton.setFont(new Font("Segoe Print", Font.BOLD, 16));
+                startButton.setMaximumSize(new Dimension(100, 35));
+                startButton.setMinimumSize(new Dimension(100, 35));
+                startButton.setPreferredSize(new Dimension(100, 35));
                 buttonBar.add(startButton, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 5), 0, 0));
@@ -246,7 +251,6 @@ public class GameSettingsFrame extends JFrame {
     private JLabel label30;
     private JPanel buttonBar;
     private JButton startButton;
-    private JLabel label3;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
     public void setStartButtonClickEventListener(Consumer<MouseEvent> consumer) {

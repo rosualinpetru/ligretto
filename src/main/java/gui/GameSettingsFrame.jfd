@@ -7,9 +7,15 @@ new FormModel {
 			name: "this"
 			"iconImage": new com.jformdesigner.model.SwingIcon( 0, "/images/logo.png" )
 			"title": "Ligretto - Game Configuration"
+			"minimumSize": new java.awt.Dimension( 880, 660 )
+			"resizable": false
+			"defaultCloseOperation": 3
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 				name: "dialogPane"
 				"border": new javax.swing.border.EmptyBorder( 12, 12, 12, 12 )
+				"maximumSize": new java.awt.Dimension( 880, 640 )
+				"minimumSize": new java.awt.Dimension( 880, 640 )
+				"preferredSize": new java.awt.Dimension( 880, 640 )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
 					"columns": 4
 					"rows": 6
@@ -156,10 +162,10 @@ new FormModel {
 						name: "startButton"
 						"text": "Start"
 						"foreground": new java.awt.Color( 0, 153, 51, 255 )
-						"font": new java.awt.Font( "Segoe Print", 1, 18 )
-						"maximumSize": new java.awt.Dimension( 130, 35 )
-						"minimumSize": new java.awt.Dimension( 130, 35 )
-						"preferredSize": new java.awt.Dimension( 130, 35 )
+						"font": new java.awt.Font( "Segoe Print", 1, 16 )
+						"maximumSize": new java.awt.Dimension( 100, 35 )
+						"minimumSize": new java.awt.Dimension( 100, 35 )
+						"preferredSize": new java.awt.Dimension( 100, 35 )
 					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 						"gridx": 4
 					} )
@@ -172,12 +178,6 @@ new FormModel {
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
 			"size": new java.awt.Dimension( 880, 660 )
-		} )
-		add( new FormComponent( "javax.swing.JLabel" ) {
-			name: "label3"
-		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 275, 610 )
-			"size": new java.awt.Dimension( 385, 35 )
 		} )
 	}
 }
