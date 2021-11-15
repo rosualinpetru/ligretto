@@ -8,6 +8,7 @@ import events.EventBus;
 import events.impl.ConcurrentEventBus;
 import events.impl.EventListener;
 import gui.managers.BoardManager;
+import gui.managers.FrameManager;
 import org.javatuples.Pair;
 
 import java.time.OffsetTime;
@@ -38,6 +39,7 @@ public class Table {
     public Phaser pauseGamePhaser;
 
     private BoardManager boardManager;
+    private FrameManager frameManager;
 
     /**
      * Although expensive, it allows both reads and written on all
@@ -66,6 +68,7 @@ public class Table {
     public Table(BoardManager boardManager) {
         this();
         this.boardManager = boardManager;
+        this.frameManager = FrameManager.getInstance();
     }
 
     /* ======== THREAD ======== */
@@ -86,14 +89,15 @@ public class Table {
             });
             eventBus.dispose();
             if (winner != null) {
-                System.out.println(winner.name + " WINS!");
-                boardManager.showMessageDialog( winner.name + " WINS!");
+                System.out.println(winner.name + " WON THIS ROUND!");
+                boardManager.showMessageDialog(winner.name + " WON THIS ROUND!");
             } else {
                 System.out.println("TIE!");
-                boardManager.showMessageDialog("TIE");
+                boardManager.showMessageDialog("TIE!");
             }
             score();
             state();
+            frameManager.switchToEndFrame();
         }
 
         /**

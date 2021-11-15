@@ -16,8 +16,12 @@ public class Main {
         StartFrame startFrame = new StartFrame();
 
         FrameManager frameManager = FrameManager.getInstance();
-        frameManager.semaphore.acquire();
 
-        frameManager.startTable();
+        while(true)
+        {
+            frameManager.semaphore.acquire();
+
+            frameManager.startTable();
+        }
     }
 }

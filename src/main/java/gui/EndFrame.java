@@ -4,11 +4,11 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.function.Consumer;
 
 public class EndFrame extends JFrame {
-    // frame
-    JFrame f;
     //panel
     JPanel p, panelButtons;
     // Table
@@ -18,16 +18,14 @@ public class EndFrame extends JFrame {
 
     // Constructor
     public EndFrame() {
-        // Frame initialization
-        f = new JFrame();
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Image frameIcon = new ImageIcon(getClass().getResource("/images/logo.png")).getImage();
-        f.setIconImage(frameIcon);
+        this.setIconImage(frameIcon);
 
-        f.setResizable(false);
+        this.setResizable(false);
 
         // Frame Title
-        f.setTitle("Ligretto - End Game");
+        this.setTitle("Ligretto - End Game");
 
         p = new JPanel();
         p.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
@@ -62,10 +60,9 @@ public class EndFrame extends JFrame {
         // adding it to JScrollPane
         JScrollPane sp = new JScrollPane(j);
         p.add(sp);
-        // Frame Size
 
         // Frame Visible = true
-        f.setVisible(true);
+        this.setVisible(true);
 
         panelButtons = new JPanel();
         panelButtons.setBorder(BorderFactory.createEmptyBorder(16, 0, 0, 0));
@@ -81,7 +78,6 @@ public class EndFrame extends JFrame {
         nextRound.setMaximumSize(new Dimension(160, 50));
         nextRound.setMinimumSize(new Dimension(160, 50));
         nextRound.setPreferredSize(new Dimension(160, 50));
-        nextRound.addActionListener(this::actionPerformed);
 
         panelButtons.add(nextRound);
         panelButtons.add(Box.createRigidArea(new Dimension(100, 0)));
@@ -92,25 +88,30 @@ public class EndFrame extends JFrame {
         endGame.setMaximumSize(new Dimension(160, 50));
         endGame.setMinimumSize(new Dimension(160, 50));
         endGame.setPreferredSize(new Dimension(160, 50));
-        endGame.addActionListener(this::actionPerformed);
 
         panelButtons.add(endGame);
 
         p.add(panelButtons);
-        f.add(p);
-        f.setSize(880, 660);
+        this.add(p);
+        this.setSize(880, 680);
     }
 
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == endGame) {
-            f.dispose();
-        }
-        if (e.getSource() == nextRound) {
-            BoardFrame boardFrame = new BoardFrame();
-            this.setContentPane(boardFrame.getContentPane());
-            this.setVisible(true);
-            f.dispose();
-        }
+    public void setNextRoundButtonClickEventListener(Consumer<MouseEvent> consumer) {
+        nextRound.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                consumer.accept(e);
+            }
+        });
+    }
+
+    public void setEndGameButtonClickEventListener(Consumer<MouseEvent> consumer) {
+        endGame.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                consumer.accept(e);
+            }
+        });
     }
 
 }

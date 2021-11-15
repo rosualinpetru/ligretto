@@ -3,6 +3,7 @@ package gui.managers;
 import core.entities.Bot;
 import core.entities.Table;
 import gui.BoardFrame;
+import gui.EndFrame;
 import gui.GameSettingsFrame;
 
 import javax.imageio.ImageIO;
@@ -11,13 +12,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FrameManager {
 
     private final static FrameManager instance = new FrameManager();
     private JFrame currentFrame;
-    private AtomicBoolean shouldEndApplication = new AtomicBoolean(false);
     private Table table;
 
     public Semaphore semaphore = new Semaphore(0);
@@ -100,6 +99,24 @@ public class FrameManager {
         boardFrame.setVisible(true);
         currentFrame.dispose();
         setCurrentFrame(boardFrame);
+    }
+
+    public void switchToEndFrame() {
+        EndFrame endFrame = new EndFrame();
+        endFrame.setLocationRelativeTo(currentFrame);
+
+        endFrame.setNextRoundButtonClickEventListener(event -> {
+            switchToBoardFrame();
+        });
+
+        endFrame.setEndGameButtonClickEventListener(event -> {
+            System.exit(0);
+        });
+
+        endFrame.setVisible(true);
+        currentFrame.dispose();
+        setCurrentFrame(endFrame);
+        System.out.println("ceva");
     }
 
     public void startTable() {
