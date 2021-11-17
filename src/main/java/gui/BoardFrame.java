@@ -5,15 +5,13 @@
 package gui;
 
 import gui.managers.PairConsumer;
-import org.javatuples.Pair;
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
 import java.util.function.Consumer;
-import javax.swing.*;
-import javax.swing.border.*;
 
 /**
  * @author Tania Topciov
@@ -218,7 +216,10 @@ public class BoardFrame extends JFrame {
         playButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                consumer.accept(e);
+                if (playButton.isEnabled()) {
+                    consumer.accept(e);
+                    playButton.setEnabled(false);
+                }
             }
         });
     }

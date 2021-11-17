@@ -88,9 +88,9 @@ public class FrameManager {
             BoardManager boardManager = new BoardManager(boardFrame);
             table = new Table(boardManager);
 
-            int NR_OF_PLAYERS = 5;
+            int NR_OF_PLAYERS = 4;
             for (int i = 0; i < NR_OF_PLAYERS; i++) {
-                table.register(new Bot("id" + i, 100L));
+                table.register(new Bot("id" + i, 500L));
             }
 
             semaphore.release();
@@ -116,7 +116,6 @@ public class FrameManager {
         endFrame.setVisible(true);
         currentFrame.dispose();
         setCurrentFrame(endFrame);
-        System.out.println("ceva");
     }
 
     public void startTable() {
