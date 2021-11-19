@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.Semaphore;
 
@@ -101,8 +102,8 @@ public class FrameManager {
         setCurrentFrame(boardFrame);
     }
 
-    public void switchToEndFrame() {
-        EndFrame endFrame = new EndFrame();
+    public void switchToEndFrame(ArrayList<String> data) {
+        EndFrame endFrame = new EndFrame(data);
         endFrame.setLocationRelativeTo(currentFrame);
 
         endFrame.setNextRoundButtonClickEventListener(event -> {

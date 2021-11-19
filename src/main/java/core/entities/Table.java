@@ -95,15 +95,16 @@ public class Table {
                 System.out.println("TIE!");
                 boardManager.showMessageDialog("TIE!");
             }
-            score();
+            ArrayList<String> data = score();
             state();
-            frameManager.switchToEndFrame();
+            frameManager.switchToEndFrame(data);
         }
 
         /**
          * Prints the score of each player after the game is finished.
          */
-        private void score() {
+        private ArrayList<String> score() {
+            ArrayList<String> data = new ArrayList<>();
             players.stream()
                     .map(player -> {
                         if (endCopy == null) {
@@ -114,8 +115,12 @@ public class Table {
                                 .flatMap(entry -> entry.getValue().getAll().stream())
                                 .filter(card -> card.player().equals(player))
                                 .count();
+                        Pair<String, Long> pair = new Pair<>(player.name, score);
+                        data.add(player.name);
+                        data.add(String.valueOf(score));
                         return Pair.with(player.name, score);
                     }).forEach(System.out::println);
+            return data;
         }
 
         /**

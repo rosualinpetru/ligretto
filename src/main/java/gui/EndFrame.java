@@ -6,6 +6,7 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public class EndFrame extends JFrame {
@@ -17,7 +18,7 @@ public class EndFrame extends JFrame {
     JButton nextRound, endGame;
 
     // Constructor
-    public EndFrame() {
+    public EndFrame(ArrayList<String> data) {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Image frameIcon = new ImageIcon(getClass().getResource("/images/logo.png")).getImage();
         this.setIconImage(frameIcon);
@@ -33,16 +34,25 @@ public class EndFrame extends JFrame {
         p.setLayout(boxlayout);
 
         // Data to be displayed in the JTable
-        String[][] data = {
+        /*String[][] data = {
                 {"Ana", "11", "39"},
                 {"Tania", "14", "30"}
-        };
+        };*/
+        String[][] d = new String[data.size()/2][3];
+        int index=0;
+        for(int i=0; i<data.size()-1; i+=2){
+            d[index][0] = data.get(i);
+            d[index][1] = data.get(i+1);
+            d[index][2] = "total";
+            index++;
+        }
+        System.out.println(d[3][0]);
 
         // Column Names
         String[] columnNames = {"Username", "Current Round", "Total"};
 
         // Initializing the JTable
-        j = new JTable(data, columnNames);
+        j = new JTable(d, columnNames);
         j.setBounds(30, 40, 200, 300);
         j.setFont(new Font("Segoe Print", Font.BOLD, 16));
         j.getTableHeader().setFont(new Font("Segoe Print", Font.BOLD, 24));
