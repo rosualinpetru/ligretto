@@ -1,5 +1,7 @@
 package gui;
 
+import gui.managers.ScoreManager;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -7,6 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.function.Consumer;
 
 public class EndFrame extends JFrame {
@@ -38,12 +41,21 @@ public class EndFrame extends JFrame {
                 {"Ana", "11", "39"},
                 {"Tania", "14", "30"}
         };*/
+        HashMap<String, Long> roundScores = new HashMap<>(data.size());
+
+        for(int i=0; i<data.size()-1; i+=2) {
+            roundScores.put(data.get(i), Long.parseLong(data.get(i + 1)));
+        }
+
+        ScoreManager scoreManager = ScoreManager.getInstance();
+        scoreManager.updateScores(roundScores);
+
         String[][] d = new String[data.size()/2][3];
         int index=0;
         for(int i=0; i<data.size()-1; i+=2){
             d[index][0] = data.get(i);
             d[index][1] = data.get(i+1);
-            d[index][2] = "total";
+            d[index][2] = scoreManager.getValueFromKey(data.get(i));
             index++;
         }
         System.out.println(d[3][0]);
