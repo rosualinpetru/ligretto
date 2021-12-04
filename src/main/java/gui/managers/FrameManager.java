@@ -1,6 +1,7 @@
 package gui.managers;
 
 import core.entities.Bot;
+import core.entities.Human;
 import core.entities.Table;
 import gui.BoardFrame;
 import gui.BotCardsFrame;
@@ -73,20 +74,22 @@ public class FrameManager {
 
         boardFrame.setPlayButtonClickEventListener(e -> {
             BoardManager boardManager = new BoardManager(boardFrame);
-            table = new Table(boardManager);
+            table = new Table(boardManager, withHumanPlayer);
 
             botCardsFrame = new BotCardsFrame();
 
             for (int i = 0; i < botNumber; i++) {
-                Bot bot = new Bot("id" + i, 500L);
+                Bot bot = new Bot("id" + i, 2000L);
                 botCardsFrame.addBotCard(bot);
 
                 table.register(bot);
             }
 
-//            if (withHumanPlayer) {
-//                table.register(new Human(humanPlayerName, boardFrame));
-//            }
+            if (withHumanPlayer) {
+                table.register(new Human(humanPlayerName, boardFrame));
+            }
+
+            boardFrame.setAlwaysOnTop(true);
 
             semaphore.release();
         });

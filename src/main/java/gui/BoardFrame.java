@@ -4,13 +4,20 @@
 
 package gui;
 
+import core.card.CardColour;
+import core.card.CardNumber;
 import gui.managers.PairConsumer;
+import utils.CardsLoader;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -68,16 +75,24 @@ public class BoardFrame extends JFrame {
             playerCardsGrid.setLayout(new GridLayout(1, 10, 12, 0));
             playerCardsGrid.add(label3);
 
+            try {
+                BufferedImage cardBackImage = ImageIO.read(Objects.requireNonNull(CardsLoader.class.getResource("/images/cards/card_back.png")));
+                Image scaledImage = cardBackImage.getScaledInstance(3 * cardBackImage.getWidth() / 4, 3 * cardBackImage.getHeight() / 4, Image.SCALE_SMOOTH);
+                card1Label.setIcon(new ImageIcon(scaledImage));
+                card2Label.setIcon(new ImageIcon(scaledImage));
+                card3Label.setIcon(new ImageIcon(scaledImage));
+                shuffle.setIcon(new ImageIcon(scaledImage));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             //---- card1Label ----
-            card1Label.setIcon(new ImageIcon(getClass().getResource("/images/cards/RED_SEVEN.png")));
             playerCardsGrid.add(card1Label);
 
             //---- card2Label ----
-            card2Label.setIcon(new ImageIcon(getClass().getResource("/images/cards/BLUE_EIGHT.png")));
             playerCardsGrid.add(card2Label);
 
             //---- card3Label ----
-            card3Label.setIcon(new ImageIcon(getClass().getResource("/images/cards/GREEN_TWO.png")));
             playerCardsGrid.add(card3Label);
 
             //======== panel1 ========
@@ -87,7 +102,6 @@ public class BoardFrame extends JFrame {
             playerCardsGrid.add(panel1);
 
             //---- shuffle ----
-            shuffle.setIcon(new ImageIcon(getClass().getResource("/images/cards/YELLOW_FIVE.png")));
             playerCardsGrid.add(shuffle);
             playerCardsGrid.add(label9);
 
@@ -97,6 +111,7 @@ public class BoardFrame extends JFrame {
 
                 //---- playButton ----
                 playButton.setText("Play");
+                playButton.setFocusable(false);
                 playButton.setFont(new Font("Segoe Print", Font.BOLD, 16));
                 playButton.setForeground(new Color(0, 153, 51));
                 playButton.setMaximumSize(new Dimension(100, 35));
@@ -106,6 +121,7 @@ public class BoardFrame extends JFrame {
 
                 //---- pauseButton ----
                 pauseButton.setText("Pause");
+                pauseButton.setFocusable(false);
                 pauseButton.setFont(new Font("Segoe Print", Font.BOLD, 16));
                 pauseButton.setForeground(new Color(0, 153, 51));
                 pauseButton.setMaximumSize(new Dimension(100, 40));
@@ -115,6 +131,7 @@ public class BoardFrame extends JFrame {
 
                 //---- resumeButton ----
                 resumeButton.setText("Resume");
+                resumeButton.setFocusable(false);
                 resumeButton.setFont(new Font("Segoe Print", Font.BOLD, 16));
                 resumeButton.setForeground(new Color(0, 153, 51));
                 resumeButton.setMaximumSize(new Dimension(100, 40));
@@ -128,8 +145,6 @@ public class BoardFrame extends JFrame {
         setSize(880, 660);
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
-
-
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
@@ -150,23 +165,27 @@ public class BoardFrame extends JFrame {
 
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
-    public void setCard1(Image image) {
+    public void setCard1(CardColour colour, CardNumber number) {
+        BufferedImage image = CardsLoader.getInstance().getCard(colour, number);
         Image scaledImage = image.getScaledInstance(card1Label.getWidth(), card1Label.getHeight(), Image.SCALE_SMOOTH);
         card1Label.setIcon(new ImageIcon(scaledImage));
     }
 
-    public void setCard2(Image image) {
-        Image scaledImage = image.getScaledInstance(card2Label.getWidth(), card1Label.getHeight(), Image.SCALE_SMOOTH);
+    public void setCard2(CardColour colour, CardNumber number) {
+        BufferedImage image = CardsLoader.getInstance().getCard(colour, number);
+        Image scaledImage = image.getScaledInstance(card2Label.getWidth(), card2Label.getHeight(), Image.SCALE_SMOOTH);
         card2Label.setIcon(new ImageIcon(scaledImage));
     }
 
-    public void setCard3(Image image) {
-        Image scaledImage = image.getScaledInstance(card3Label.getWidth(), card1Label.getHeight(), Image.SCALE_SMOOTH);
+    public void setCard3(CardColour colour, CardNumber number) {
+        BufferedImage image = CardsLoader.getInstance().getCard(colour, number);
+        Image scaledImage = image.getScaledInstance(card3Label.getWidth(), card3Label.getHeight(), Image.SCALE_SMOOTH);
         card3Label.setIcon(new ImageIcon(scaledImage));
     }
 
-    public void setShuffle(Image image) {
-        Image scaledImage = image.getScaledInstance(shuffle.getWidth(), card1Label.getHeight(), Image.SCALE_SMOOTH);
+    public void setShuffle(CardColour colour, CardNumber number) {
+        BufferedImage image = CardsLoader.getInstance().getCard(colour, number);
+        Image scaledImage = image.getScaledInstance(shuffle.getWidth(), shuffle.getHeight(), Image.SCALE_SMOOTH);
         shuffle.setIcon(new ImageIcon(scaledImage));
     }
 
@@ -261,5 +280,11 @@ public class BoardFrame extends JFrame {
                 }
             });
         }
+    }
+
+    public void setShuffleCardBack() {
+        BufferedImage image = CardsLoader.getInstance().getCardBack();
+        Image scaledImage = image.getScaledInstance(shuffle.getWidth(), shuffle.getHeight(), Image.SCALE_SMOOTH);
+        shuffle.setIcon(new ImageIcon(scaledImage));
     }
 }

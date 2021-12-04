@@ -16,6 +16,7 @@ public class Checker implements Runnable {
     private final Duration COUNTDOWN_DURATION = Duration.ofSeconds(5);
     private final Table table;
     private final AtomicBoolean shouldEndGame = new AtomicBoolean(false);
+    private boolean disabled = false;
 
     public Checker(Table table) {
         this.table = table;
@@ -28,6 +29,10 @@ public class Checker implements Runnable {
                 lock.lock();
                 var duration = Duration.between(timestamp, OffsetTime.now());
                 lock.unlock();
+
+                if (disabled) {
+                    continue;
+                }
 
                 if (duration.compareTo(COUNTDOWN_DURATION) > 0) {
                     table.pause();
@@ -62,5 +67,9 @@ public class Checker implements Runnable {
         }
 
         shouldEndGame.set(true);
+    }
+
+    public void disable() {
+        disabled = true;
     }
 }

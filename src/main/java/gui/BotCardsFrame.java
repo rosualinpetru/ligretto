@@ -28,6 +28,7 @@ public class BotCardsFrame extends JFrame {
         setPreferredSize(new Dimension(BOT_CARDS_WIDTH, BOT_CARDS_HEIGHT));
 
         add(scrollPane);
+        setAlwaysOnTop(false);
         pack();
         setVisible(true);
     }

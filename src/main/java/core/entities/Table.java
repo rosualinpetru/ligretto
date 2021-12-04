@@ -65,10 +65,13 @@ public class Table {
         eventBus.registerListener(listener);
     }
 
-    public Table(BoardManager boardManager) {
+    public Table(BoardManager boardManager, boolean disableChecker) {
         this();
         this.boardManager = boardManager;
         this.frameManager = FrameManager.getInstance();
+        if (disableChecker) {
+            this.checker.disable();
+        }
     }
 
     /* ======== THREAD ======== */
