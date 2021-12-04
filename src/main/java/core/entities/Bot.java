@@ -2,14 +2,25 @@ package core.entities;
 
 import core.event.CardPlacedEvent;
 import core.exception.IllegalTableCallError;
+import gui.BotCardsPanel;
 
 public final class Bot extends Player {
 
     private final long delayMilliseconds;
+    private BotCardsPanel botCardsPanel;
 
     public Bot(String id, long delayMilliseconds) {
         super(id);
         this.delayMilliseconds = Math.max(0, delayMilliseconds);
+        botCardsPanel = null;
+    }
+
+    public void linkToCard(BotCardsPanel botCardsPanel) {
+        this.botCardsPanel = botCardsPanel;
+        for (int i = 1; i <= facedUpCards.size(); i++) {
+            int finalI = i;
+            facedUpCards.peek(i).ifPresent(card -> botCardsPanel.setCardAtPosition(finalI, card));
+        }
     }
 
     /**
@@ -150,7 +161,12 @@ public final class Bot extends Player {
      */
     private void updateFacedUpCards(int position) {
         var newCard = targetDeck.pop();
-        newCard.ifPresent(card -> facedUpCards.put(position, card));
+        newCard.ifPresent(card -> {
+            facedUpCards.put(position, card);
+            if (botCardsPanel != null) {
+                botCardsPanel.setCardAtPosition(position, card);
+            }
+        });
         if (targetDeck.isEmpty()) {
             table.end(this);
         }

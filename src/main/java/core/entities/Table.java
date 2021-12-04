@@ -90,14 +90,20 @@ public class Table {
             eventBus.dispose();
             if (winner != null) {
                 System.out.println(winner.name + " WON THIS ROUND!");
-                boardManager.showMessageDialog(winner.name + " WON THIS ROUND!");
+                if (boardManager != null) {
+                    boardManager.showMessageDialog(winner.name + " WON THIS ROUND!");
+                }
             } else {
                 System.out.println("TIE!");
-                boardManager.showMessageDialog("TIE!");
+                if (boardManager != null) {
+                    boardManager.showMessageDialog("TIE!");
+                }
             }
             ArrayList<String> data = score();
             state();
-            frameManager.switchToEndFrame(data);
+            if (frameManager != null) {
+                frameManager.switchToEndFrame(data);
+            }
         }
 
         /**
@@ -291,7 +297,9 @@ public class Table {
         var counter = decksCounter.incrementAndGet();
         decks.add(Map.entry(counter, deck));
 
-        boardManager.putCardAtPosition(card, counter);
+        if (boardManager != null) {
+            boardManager.putCardAtPosition(card, counter);
+        }
 
         eventBus.publish(new CardPlacedEvent(counter));
         System.out.println("New deck: " + card + ", position " + counter);
@@ -317,7 +325,9 @@ public class Table {
             var condition = deck.put(card);
             if (condition) {
                 s += "SUCCESS";
-                boardManager.putCardAtPosition(card, position);
+                if (boardManager != null) {
+                    boardManager.putCardAtPosition(card, position);
+                }
                 eventBus.publish(new CardPlacedEvent(position));
             } else {
                 s += "FAILURE";

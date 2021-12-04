@@ -1,17 +1,17 @@
 package gui.managers;
 
+import core.card.CardColour;
+import core.card.CardNumber;
 import core.entities.Bot;
 import core.entities.Table;
 import gui.BoardFrame;
+import gui.BotCardsFrame;
 import gui.EndFrame;
 import gui.GameSettingsFrame;
+import utils.CardsLoader;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.concurrent.Semaphore;
 
 public class FrameManager {
@@ -19,6 +19,7 @@ public class FrameManager {
     private final static FrameManager instance = new FrameManager();
     private JFrame currentFrame;
     private Table table;
+    private BotCardsFrame botCardsFrame;
 
     public Semaphore semaphore = new Semaphore(0);
 
@@ -57,10 +58,12 @@ public class FrameManager {
         boardFrame.setLocationRelativeTo(currentFrame);
         boardFrame.addLabels();
 
-        boardFrame.setCard1(getBufferedImage("BLUE_TEN"));
-        boardFrame.setCard2(getBufferedImage("BLUE_TEN"));
-        boardFrame.setCard3(getBufferedImage("BLUE_TEN"));
-        boardFrame.setShuffle(getBufferedImage("BLUE_TEN"));
+        CardsLoader cardsLoader = CardsLoader.getInstance();
+
+        boardFrame.setCard1(cardsLoader.getCard(CardColour.BLUE, CardNumber.TEN));
+        boardFrame.setCard2(cardsLoader.getCard(CardColour.BLUE, CardNumber.TEN));
+        boardFrame.setCard3(cardsLoader.getCard(CardColour.BLUE, CardNumber.TEN));
+        boardFrame.setShuffle(cardsLoader.getCard(CardColour.BLUE, CardNumber.TEN));
 
         boardFrame.setCard1ClickEventListener(e -> {
             System.out.println("Card1 was clicked");
@@ -89,9 +92,14 @@ public class FrameManager {
             BoardManager boardManager = new BoardManager(boardFrame);
             table = new Table(boardManager);
 
+            botCardsFrame = new BotCardsFrame();
+
             int NR_OF_PLAYERS = 4;
             for (int i = 0; i < NR_OF_PLAYERS; i++) {
-                table.register(new Bot("id" + i, 500L));
+                Bot bot = new Bot("id" + i, 500L);
+                botCardsFrame.addBotCard(bot);
+
+                table.register(bot);
             }
 
             semaphore.release();
@@ -103,6 +111,11 @@ public class FrameManager {
     }
 
     public void switchToEndFrame(ArrayList<String> data) {
+        if (botCardsFrame != null) {
+            botCardsFrame.dispose();
+            botCardsFrame = null;
+        }
+
         EndFrame endFrame = new EndFrame(data);
         endFrame.setLocationRelativeTo(currentFrame);
 
@@ -128,15 +141,5 @@ public class FrameManager {
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
-    }
-
-    private static BufferedImage getBufferedImage(String path) {
-        BufferedImage img = null;
-        try {
-            img = ImageIO.read(Objects.requireNonNull(BoardManager.class.getResource("/images/cards/" + path + ".png")));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return img;
     }
 }
