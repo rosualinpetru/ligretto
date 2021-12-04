@@ -4,22 +4,15 @@
 
 package gui;
 
-import core.entities.Bot;
-import core.entities.Table;
-import gui.managers.BoardManager;
+import main.Main;
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
+import java.util.Enumeration;
 import java.util.function.Consumer;
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.border.*;
 
 /**
  * @author Tania Topciov
@@ -27,8 +20,8 @@ import javax.swing.border.*;
 public class GameSettingsFrame extends JFrame {
     public GameSettingsFrame() {
         initComponents();
-        createRadioButtonGroup();
         addItemsToShapeComboBox();
+        addItemsToGameModeComboBox();
     }
 
     private void initComponents() {
@@ -52,8 +45,10 @@ public class GameSettingsFrame extends JFrame {
         label17 = new JLabel();
         label18 = new JLabel();
         panel4 = new JPanel();
+        panel6 = new JPanel();
         label2 = new JLabel();
-        shapeComboBox = new JComboBox();
+        gameModeComboBox = new JComboBox();
+        difficultyComboBox = new JComboBox();
         label21 = new JLabel();
         label22 = new JLabel();
         label23 = new JLabel();
@@ -67,6 +62,10 @@ public class GameSettingsFrame extends JFrame {
         label28 = new JLabel();
         label29 = new JLabel();
         label30 = new JLabel();
+        label34 = new JLabel();
+        label58 = new JLabel();
+        label220 = new JLabel();
+        label210 = new JLabel();
         buttonBar = new JPanel();
         startButton = new JButton();
 
@@ -89,7 +88,7 @@ public class GameSettingsFrame extends JFrame {
 
             //======== contentPanel ========
             {
-                contentPanel.setLayout(new GridLayout(6, 4));
+                contentPanel.setLayout(new GridLayout(7, 4));
                 contentPanel.add(label7);
 
                 //---- label19 ----
@@ -123,7 +122,7 @@ public class GameSettingsFrame extends JFrame {
                     panel3.add(label1);
 
                     //---- nameField ----
-                    nameField.setFont(new Font("Segoe Print", Font.PLAIN, 16));
+                    nameField.setFont(new Font("Segoe Print", Font.PLAIN, 14));
                     panel3.add(nameField);
                 }
                 contentPanel.add(panel3);
@@ -131,7 +130,7 @@ public class GameSettingsFrame extends JFrame {
                 contentPanel.add(label17);
 
                 //---- label18 ----
-                label18.setText("Select shape:");
+                label18.setText("Game mode:");
                 label18.setForeground(new Color(0, 153, 51));
                 label18.setFont(new Font("Segoe Print", Font.BOLD, 20));
                 contentPanel.add(label18);
@@ -144,13 +143,31 @@ public class GameSettingsFrame extends JFrame {
                     label2.setFont(new Font("Segoe Print", Font.PLAIN, 16));
                     panel4.add(label2);
 
-                    //---- shapeComboBox ----
-                    shapeComboBox.setFont(new Font("Segoe Print", Font.PLAIN, 16));
-                    panel4.add(shapeComboBox);
+                    //---- gameModeComboBox ----
+                    gameModeComboBox.setFont(new Font("Segoe Print", Font.PLAIN, 14));
+                    panel4.add(gameModeComboBox);
                 }
                 contentPanel.add(panel4);
                 contentPanel.add(label21);
                 contentPanel.add(label22);
+
+                label58.setText("Difficulty:");
+                label58.setForeground(new Color(0, 153, 51));
+                label58.setFont(new Font("Segoe Print", Font.BOLD, 20));
+                contentPanel.add(label58);
+
+                {
+                    panel6.setLayout(new GridLayout(3, 0));
+
+                    label34.setFont(new Font("Segoe Print", Font.PLAIN, 16));
+                    panel6.add(label34);
+
+                    difficultyComboBox.setFont(new Font("Segoe Print", Font.PLAIN, 14));
+                    panel6.add(difficultyComboBox);
+                }
+                contentPanel.add(panel6);
+                contentPanel.add(label210);
+                contentPanel.add(label220);
 
                 //---- label23 ----
                 label23.setText("Players number:");
@@ -178,6 +195,12 @@ public class GameSettingsFrame extends JFrame {
                     //---- radioButton6 ----
                     radioButton6.setText("6");
                     panel2.add(radioButton6);
+
+                    buttonGroup = new ButtonGroup();
+                    buttonGroup.add(radioButton3);
+                    buttonGroup.add(radioButton4);
+                    buttonGroup.add(radioButton5);
+                    buttonGroup.add(radioButton6);
                 }
                 contentPanel.add(panel2);
                 contentPanel.add(label26);
@@ -192,8 +215,8 @@ public class GameSettingsFrame extends JFrame {
             {
                 buttonBar.setBorder(new EmptyBorder(12, 0, 0, 0));
                 buttonBar.setLayout(new GridBagLayout());
-                ((GridBagLayout)buttonBar.getLayout()).columnWidths = new int[] {0, 0, 0, 85, 85, 0};
-                ((GridBagLayout)buttonBar.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 0.0, 0.0, 0.0};
+                ((GridBagLayout) buttonBar.getLayout()).columnWidths = new int[]{0, 0, 0, 85, 85, 0};
+                ((GridBagLayout) buttonBar.getLayout()).columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 0.0};
 
                 //---- startButton ----
                 startButton.setText("Start");
@@ -203,8 +226,8 @@ public class GameSettingsFrame extends JFrame {
                 startButton.setMinimumSize(new Dimension(100, 35));
                 startButton.setPreferredSize(new Dimension(100, 35));
                 buttonBar.add(startButton, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                    new Insets(0, 0, 0, 5), 0, 0));
+                        GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                        new Insets(0, 0, 0, 5), 0, 0));
             }
             dialogPane.add(buttonBar, BorderLayout.SOUTH);
         }
@@ -227,7 +250,9 @@ public class GameSettingsFrame extends JFrame {
     private JLabel label11;
     private JLabel label12;
     private JLabel label14;
+    private JLabel label34;
     private JPanel panel3;
+    private JPanel panel6;
     private JLabel label1;
     private JTextField nameField;
     private JLabel label16;
@@ -235,10 +260,14 @@ public class GameSettingsFrame extends JFrame {
     private JLabel label18;
     private JPanel panel4;
     private JLabel label2;
-    private JComboBox shapeComboBox;
+    private JComboBox gameModeComboBox;
+    private JComboBox difficultyComboBox;
     private JLabel label21;
+    private JLabel label210;
     private JLabel label22;
+    private JLabel label220;
     private JLabel label23;
+    private JLabel label58;
     private JPanel panel2;
     private JRadioButton radioButton3;
     private JRadioButton radioButton4;
@@ -251,6 +280,7 @@ public class GameSettingsFrame extends JFrame {
     private JLabel label30;
     private JPanel buttonBar;
     private JButton startButton;
+    private ButtonGroup buttonGroup;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
     public void setStartButtonClickEventListener(Consumer<MouseEvent> consumer) {
@@ -262,65 +292,37 @@ public class GameSettingsFrame extends JFrame {
         });
     }
 
-    public void setRadioButton3ClickEventListener(Consumer<MouseEvent> consumer) {
-        radioButton3.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                consumer.accept(e);
-            }
-        });
+    public String getGameModeComboBoxSelectedItem() {
+        return gameModeComboBox.getSelectedItem().toString();
     }
 
-    public void setRadioButton4ClickEventListener(Consumer<MouseEvent> consumer) {
-        radioButton4.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                consumer.accept(e);
-            }
-        });
+    public String getDifficultyComboBoxSelectedItem() {
+        return difficultyComboBox.getSelectedItem().toString();
     }
 
-    public void setRadioButton5ClickEventListener(Consumer<MouseEvent> consumer) {
-        radioButton5.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                consumer.accept(e);
-            }
-        });
-    }
-
-    public void setRadioButton6ClickEventListener(Consumer<MouseEvent> consumer) {
-        radioButton6.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                consumer.accept(e);
-            }
-        });
-    }
-
-    public String getComboBoxSelectedItem() {
-        return shapeComboBox.getSelectedItem().toString();
-    }
-
-    public String getNamFieldContent() {
-        return nameField.getText().toString();
+    public String getNameFieldContent() {
+        return nameField.getText();
     }
 
     public void addItemsToShapeComboBox() {
-        shapeComboBox.addItem("circle");
-        shapeComboBox.addItem("square");
-        shapeComboBox.addItem("triangle");
-        shapeComboBox.addItem("diamond");
-        shapeComboBox.addItem("star");
-        shapeComboBox.addItem("trapeze");
+        gameModeComboBox.addItem(Main.ONLY_BOTS_PLAYING);
+        gameModeComboBox.addItem(Main.PLAY_WITH_BOTS);
     }
 
-    public void createRadioButtonGroup()
-    {
-        ButtonGroup buttonGroup = new ButtonGroup();
-        buttonGroup.add(radioButton3);
-        buttonGroup.add(radioButton4);
-        buttonGroup.add(radioButton5);
-        buttonGroup.add(radioButton6);
+    public void addItemsToGameModeComboBox() {
+        difficultyComboBox.addItem(Main.EASY);
+        difficultyComboBox.addItem(Main.MEDIUM);
+        difficultyComboBox.addItem(Main.HARD);
+    }
+
+    public int getNumberOfSelectedBots() {
+        Enumeration<AbstractButton> elements = buttonGroup.getElements();
+        while (elements.hasMoreElements()) {
+            AbstractButton element = elements.nextElement();
+            if (element.isSelected()) {
+                return Integer.parseInt(element.getText());
+            }
+        }
+        return 3;
     }
 }

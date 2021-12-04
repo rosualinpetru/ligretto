@@ -39,12 +39,23 @@ public final class ShufflingDeck {
         if (isEmpty()) {
             return Optional.empty();
         }
-        // todo review why pointer can be equal to cards.size()
+
         if (pointer >= cards.size()) {
             pointer = 0;
         }
         var card = cards.get(pointer);
         cards.remove(card);
+        return Optional.of(card);
+    }
+
+    public Optional<Card> peek() {
+        if (isEmpty()) {
+            return Optional.empty();
+        }
+        if (pointer >= cards.size()) {
+            pointer = 0;
+        }
+        var card = cards.get(pointer);
         return Optional.of(card);
     }
 

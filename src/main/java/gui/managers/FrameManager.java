@@ -1,14 +1,13 @@
 package gui.managers;
 
-import core.card.CardColour;
-import core.card.CardNumber;
 import core.entities.Bot;
+import core.entities.Human;
 import core.entities.Table;
 import gui.BoardFrame;
 import gui.BotCardsFrame;
 import gui.EndFrame;
 import gui.GameSettingsFrame;
-import utils.CardsLoader;
+import main.Main;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -20,6 +19,10 @@ public class FrameManager {
     private JFrame currentFrame;
     private Table table;
     private BotCardsFrame botCardsFrame;
+    private String humanPlayerName;
+    private int botNumber = 3;
+    private boolean withHumanPlayer = false;
+    private long delay = 2000L;
 
     public Semaphore semaphore = new Semaphore(0);
 
@@ -45,6 +48,25 @@ public class FrameManager {
         gameSettingsFrame.setLocationRelativeTo(currentFrame);
 
         gameSettingsFrame.setStartButtonClickEventListener(event -> {
+            String gameMode = gameSettingsFrame.getGameModeComboBoxSelectedItem();
+            if (gameMode.equals(Main.PLAY_WITH_BOTS)) {
+                withHumanPlayer = true;
+            }
+
+            String difficulty = gameSettingsFrame.getDifficultyComboBoxSelectedItem();
+            switch (difficulty) {
+                case Main.EASY -> delay = 4500L;
+                case Main.MEDIUM -> delay = 3000L;
+                case Main.HARD -> delay = 1500L;
+            }
+
+            botNumber = gameSettingsFrame.getNumberOfSelectedBots();
+
+            humanPlayerName = gameSettingsFrame.getNameFieldContent();
+            if (humanPlayerName == null || humanPlayerName.isEmpty()) {
+                humanPlayerName = "Player";
+            }
+
             switchToBoardFrame();
         });
 
@@ -58,49 +80,24 @@ public class FrameManager {
         boardFrame.setLocationRelativeTo(currentFrame);
         boardFrame.addLabels();
 
-        CardsLoader cardsLoader = CardsLoader.getInstance();
-
-        boardFrame.setCard1(cardsLoader.getCard(CardColour.BLUE, CardNumber.TEN));
-        boardFrame.setCard2(cardsLoader.getCard(CardColour.BLUE, CardNumber.TEN));
-        boardFrame.setCard3(cardsLoader.getCard(CardColour.BLUE, CardNumber.TEN));
-        boardFrame.setShuffle(cardsLoader.getCard(CardColour.BLUE, CardNumber.TEN));
-
-        boardFrame.setCard1ClickEventListener(e -> {
-            System.out.println("Card1 was clicked");
-        });
-
-        boardFrame.setCard2ClickEventListener(e -> {
-            System.out.println("Card2 was clicked");
-        });
-
-        boardFrame.setCard3ClickEventListener(e -> {
-            System.out.println("Card3 was clicked");
-        });
-
-        boardFrame.setShuffleClickEventListener(e -> {
-            System.out.println("Shuffle was clicked");
-        });
-
-        boardFrame.setDeckClickEventListener((position, e) -> {
-            System.out.println("Deck" + position + " was clicked");
-        });
-
-        boardFrame.setPauseButtonClickEventListener(e -> {
-        });
-
         boardFrame.setPlayButtonClickEventListener(e -> {
             BoardManager boardManager = new BoardManager(boardFrame);
-            table = new Table(boardManager);
+            table = new Table(boardManager, withHumanPlayer);
 
             botCardsFrame = new BotCardsFrame();
 
-            int NR_OF_PLAYERS = 4;
-            for (int i = 0; i < NR_OF_PLAYERS; i++) {
-                Bot bot = new Bot("id" + i, 500L);
+            for (int i = 0; i < botNumber; i++) {
+                Bot bot = new Bot("id" + i, delay);
                 botCardsFrame.addBotCard(bot);
 
                 table.register(bot);
             }
+
+            if (withHumanPlayer) {
+                table.register(new Human(humanPlayerName, boardFrame));
+            }
+
+            boardFrame.setAlwaysOnTop(true);
 
             semaphore.release();
         });

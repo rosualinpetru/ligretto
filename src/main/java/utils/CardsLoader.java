@@ -12,6 +12,7 @@ import java.util.Objects;
 
 public class CardsLoader {
     private static final CardsLoader cardsLoader = new CardsLoader();
+    private static final String CARD_BACK = "card_back";
 
     private final Map<String, BufferedImage> cardImages = new HashMap<>();
 
@@ -39,6 +40,15 @@ public class CardsLoader {
                 }
             }
         }
+
+        try {
+            String path = "/images/cards/" + CARD_BACK + ".png";
+            BufferedImage img = ImageIO.read(Objects.requireNonNull(CardsLoader.class.getResource(path)));
+            cardImages.put(CARD_BACK, img);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+
+        }
     }
 
     public BufferedImage getCard(CardColour cardColour, CardNumber cardNumber) {
@@ -47,6 +57,10 @@ public class CardsLoader {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public BufferedImage getCardBack() {
+        return cardImages.get(CARD_BACK);
     }
 
     private String getCardName(CardColour cardColour, CardNumber cardNumber) {
