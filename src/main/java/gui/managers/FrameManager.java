@@ -3,16 +3,13 @@ package gui.managers;
 import core.entities.Bot;
 import core.entities.Table;
 import gui.BoardFrame;
+import gui.BotCardsFrame;
 import gui.EndFrame;
 import gui.GameSettingsFrame;
 import main.Main;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.concurrent.Semaphore;
 
 public class FrameManager {
@@ -20,6 +17,7 @@ public class FrameManager {
     private final static FrameManager instance = new FrameManager();
     private JFrame currentFrame;
     private Table table;
+    private BotCardsFrame botCardsFrame;
     private String humanPlayerName;
     private int botNumber = 3;
     private boolean withHumanPlayer = false;
@@ -77,8 +75,13 @@ public class FrameManager {
             BoardManager boardManager = new BoardManager(boardFrame);
             table = new Table(boardManager);
 
+            botCardsFrame = new BotCardsFrame();
+
             for (int i = 0; i < botNumber; i++) {
-                table.register(new Bot("id" + i, 100L));
+                Bot bot = new Bot("id" + i, 500L);
+                botCardsFrame.addBotCard(bot);
+
+                table.register(bot);
             }
 
 //            if (withHumanPlayer) {
@@ -94,6 +97,11 @@ public class FrameManager {
     }
 
     public void switchToEndFrame(ArrayList<String> data) {
+        if (botCardsFrame != null) {
+            botCardsFrame.dispose();
+            botCardsFrame = null;
+        }
+
         EndFrame endFrame = new EndFrame(data);
         endFrame.setLocationRelativeTo(currentFrame);
 
@@ -119,15 +127,5 @@ public class FrameManager {
         } catch (InterruptedException ex) {
             ex.printStackTrace();
         }
-    }
-
-    private static BufferedImage getBufferedImage(String path) {
-        BufferedImage img = null;
-        try {
-            img = ImageIO.read(Objects.requireNonNull(BoardManager.class.getResource("/images/cards/" + path + ".png")));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return img;
     }
 }
