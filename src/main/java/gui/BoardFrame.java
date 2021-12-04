@@ -36,6 +36,7 @@ public class BoardFrame extends JFrame {
         label1 = new JLabel();
         playButton = new JButton();
         pauseButton = new JButton();
+        resumeButton = new JButton();
 
         //======== this ========
         setVisible(true);
@@ -93,7 +94,6 @@ public class BoardFrame extends JFrame {
             //======== panel3 ========
             {
                 panel3.setLayout(new GridLayout(3, 1, 0, 10));
-                panel3.add(label1);
 
                 //---- playButton ----
                 playButton.setText("Play");
@@ -112,6 +112,15 @@ public class BoardFrame extends JFrame {
                 pauseButton.setMinimumSize(new Dimension(100, 40));
                 pauseButton.setPreferredSize(new Dimension(100, 40));
                 panel3.add(pauseButton);
+
+                //---- resumeButton ----
+                resumeButton.setText("Resume");
+                resumeButton.setFont(new Font("Segoe Print", Font.BOLD, 16));
+                resumeButton.setForeground(new Color(0, 153, 51));
+                resumeButton.setMaximumSize(new Dimension(100, 40));
+                resumeButton.setMinimumSize(new Dimension(100, 40));
+                resumeButton.setPreferredSize(new Dimension(100, 40));
+                panel3.add(resumeButton);
             }
             playerCardsGrid.add(panel3);
         }
@@ -137,6 +146,8 @@ public class BoardFrame extends JFrame {
     private JLabel label1;
     private JButton playButton;
     private JButton pauseButton;
+    private JButton resumeButton;
+
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
     public void setCard1(Image image) {
@@ -205,6 +216,15 @@ public class BoardFrame extends JFrame {
 
     public void setPauseButtonClickEventListener(Consumer<MouseEvent> consumer) {
         pauseButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                consumer.accept(e);
+            }
+        });
+    }
+
+    public void setResumeButtonClickEventListener(Consumer<MouseEvent> consumer) {
+        resumeButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 consumer.accept(e);

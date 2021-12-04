@@ -4,22 +4,15 @@
 
 package gui;
 
-import core.entities.Bot;
-import core.entities.Table;
-import gui.managers.BoardManager;
+import main.Main;
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
+import java.util.Enumeration;
 import java.util.function.Consumer;
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.border.*;
 
 /**
  * @author Tania Topciov
@@ -27,7 +20,6 @@ import javax.swing.border.*;
 public class GameSettingsFrame extends JFrame {
     public GameSettingsFrame() {
         initComponents();
-        createRadioButtonGroup();
         addItemsToShapeComboBox();
     }
 
@@ -131,7 +123,7 @@ public class GameSettingsFrame extends JFrame {
                 contentPanel.add(label17);
 
                 //---- label18 ----
-                label18.setText("Select shape:");
+                label18.setText("Game mode:");
                 label18.setForeground(new Color(0, 153, 51));
                 label18.setFont(new Font("Segoe Print", Font.BOLD, 20));
                 contentPanel.add(label18);
@@ -178,6 +170,12 @@ public class GameSettingsFrame extends JFrame {
                     //---- radioButton6 ----
                     radioButton6.setText("6");
                     panel2.add(radioButton6);
+
+                    buttonGroup = new ButtonGroup();
+                    buttonGroup.add(radioButton3);
+                    buttonGroup.add(radioButton4);
+                    buttonGroup.add(radioButton5);
+                    buttonGroup.add(radioButton6);
                 }
                 contentPanel.add(panel2);
                 contentPanel.add(label26);
@@ -192,8 +190,8 @@ public class GameSettingsFrame extends JFrame {
             {
                 buttonBar.setBorder(new EmptyBorder(12, 0, 0, 0));
                 buttonBar.setLayout(new GridBagLayout());
-                ((GridBagLayout)buttonBar.getLayout()).columnWidths = new int[] {0, 0, 0, 85, 85, 0};
-                ((GridBagLayout)buttonBar.getLayout()).columnWeights = new double[] {0.0, 1.0, 0.0, 0.0, 0.0, 0.0};
+                ((GridBagLayout) buttonBar.getLayout()).columnWidths = new int[]{0, 0, 0, 85, 85, 0};
+                ((GridBagLayout) buttonBar.getLayout()).columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 0.0};
 
                 //---- startButton ----
                 startButton.setText("Start");
@@ -203,8 +201,8 @@ public class GameSettingsFrame extends JFrame {
                 startButton.setMinimumSize(new Dimension(100, 35));
                 startButton.setPreferredSize(new Dimension(100, 35));
                 buttonBar.add(startButton, new GridBagConstraints(4, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                    new Insets(0, 0, 0, 5), 0, 0));
+                        GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                        new Insets(0, 0, 0, 5), 0, 0));
             }
             dialogPane.add(buttonBar, BorderLayout.SOUTH);
         }
@@ -251,6 +249,7 @@ public class GameSettingsFrame extends JFrame {
     private JLabel label30;
     private JPanel buttonBar;
     private JButton startButton;
+    private ButtonGroup buttonGroup;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
     public void setStartButtonClickEventListener(Consumer<MouseEvent> consumer) {
@@ -262,65 +261,27 @@ public class GameSettingsFrame extends JFrame {
         });
     }
 
-    public void setRadioButton3ClickEventListener(Consumer<MouseEvent> consumer) {
-        radioButton3.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                consumer.accept(e);
-            }
-        });
-    }
-
-    public void setRadioButton4ClickEventListener(Consumer<MouseEvent> consumer) {
-        radioButton4.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                consumer.accept(e);
-            }
-        });
-    }
-
-    public void setRadioButton5ClickEventListener(Consumer<MouseEvent> consumer) {
-        radioButton5.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                consumer.accept(e);
-            }
-        });
-    }
-
-    public void setRadioButton6ClickEventListener(Consumer<MouseEvent> consumer) {
-        radioButton6.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                consumer.accept(e);
-            }
-        });
-    }
-
     public String getComboBoxSelectedItem() {
         return shapeComboBox.getSelectedItem().toString();
     }
 
-    public String getNamFieldContent() {
-        return nameField.getText().toString();
+    public String getNameFieldContent() {
+        return nameField.getText();
     }
 
     public void addItemsToShapeComboBox() {
-        shapeComboBox.addItem("circle");
-        shapeComboBox.addItem("square");
-        shapeComboBox.addItem("triangle");
-        shapeComboBox.addItem("diamond");
-        shapeComboBox.addItem("star");
-        shapeComboBox.addItem("trapeze");
+        shapeComboBox.addItem(Main.ONLY_BOTS_PLAYING);
+        shapeComboBox.addItem(Main.PLAY_WITH_BOTS);
     }
 
-    public void createRadioButtonGroup()
-    {
-        ButtonGroup buttonGroup = new ButtonGroup();
-        buttonGroup.add(radioButton3);
-        buttonGroup.add(radioButton4);
-        buttonGroup.add(radioButton5);
-        buttonGroup.add(radioButton6);
+    public int getNumberOfSelectedBots() {
+        Enumeration<AbstractButton> elements = buttonGroup.getElements();
+        while (elements.hasMoreElements()) {
+            AbstractButton element = elements.nextElement();
+            if (element.isSelected()) {
+                return Integer.parseInt(element.getText());
+            }
+        }
+        return 3;
     }
 }

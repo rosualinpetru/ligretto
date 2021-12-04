@@ -5,6 +5,7 @@ import core.entities.Table;
 import gui.BoardFrame;
 import gui.EndFrame;
 import gui.GameSettingsFrame;
+import main.Main;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -19,6 +20,9 @@ public class FrameManager {
     private final static FrameManager instance = new FrameManager();
     private JFrame currentFrame;
     private Table table;
+    private String humanPlayerName;
+    private int botNumber = 3;
+    private boolean withHumanPlayer = false;
 
     public Semaphore semaphore = new Semaphore(0);
 
@@ -44,6 +48,18 @@ public class FrameManager {
         gameSettingsFrame.setLocationRelativeTo(currentFrame);
 
         gameSettingsFrame.setStartButtonClickEventListener(event -> {
+            String gameMode = gameSettingsFrame.getComboBoxSelectedItem();
+            if (gameMode.equals(Main.PLAY_WITH_BOTS)) {
+                withHumanPlayer = true;
+            }
+
+            botNumber = gameSettingsFrame.getNumberOfSelectedBots();
+
+            humanPlayerName = gameSettingsFrame.getNameFieldContent();
+            if (humanPlayerName == null || humanPlayerName.isEmpty()) {
+                humanPlayerName = "Player";
+            }
+
             switchToBoardFrame();
         });
 
@@ -57,42 +73,17 @@ public class FrameManager {
         boardFrame.setLocationRelativeTo(currentFrame);
         boardFrame.addLabels();
 
-        boardFrame.setCard1(getBufferedImage("BLUE_TEN"));
-        boardFrame.setCard2(getBufferedImage("BLUE_TEN"));
-        boardFrame.setCard3(getBufferedImage("BLUE_TEN"));
-        boardFrame.setShuffle(getBufferedImage("BLUE_TEN"));
-
-        boardFrame.setCard1ClickEventListener(e -> {
-            System.out.println("Card1 was clicked");
-        });
-
-        boardFrame.setCard2ClickEventListener(e -> {
-            System.out.println("Card2 was clicked");
-        });
-
-        boardFrame.setCard3ClickEventListener(e -> {
-            System.out.println("Card3 was clicked");
-        });
-
-        boardFrame.setShuffleClickEventListener(e -> {
-            System.out.println("Shuffle was clicked");
-        });
-
-        boardFrame.setDeckClickEventListener((position, e) -> {
-            System.out.println("Deck" + position + " was clicked");
-        });
-
-        boardFrame.setPauseButtonClickEventListener(e -> {
-        });
-
         boardFrame.setPlayButtonClickEventListener(e -> {
             BoardManager boardManager = new BoardManager(boardFrame);
             table = new Table(boardManager);
 
-            int NR_OF_PLAYERS = 4;
-            for (int i = 0; i < NR_OF_PLAYERS; i++) {
-                table.register(new Bot("id" + i, 500L));
+            for (int i = 0; i < botNumber; i++) {
+                table.register(new Bot("id" + i, 100L));
             }
+
+//            if (withHumanPlayer) {
+//                table.register(new Human(humanPlayerName, boardFrame));
+//            }
 
             semaphore.release();
         });
