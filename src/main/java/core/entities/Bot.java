@@ -29,6 +29,15 @@ public final class Bot extends Player {
      */
     @Override
     public void run() {
+        if (delayMilliseconds != 0) {
+            double sleepTime = Math.random();
+            long longSleepTime = (long) sleepTime * 1000;
+            try {
+                Thread.sleep(longSleepTime);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         do {
             try {
                 while (table.getState() != TableState.ENDED && !Thread.interrupted()) {

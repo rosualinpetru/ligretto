@@ -22,6 +22,7 @@ public class FrameManager {
     private String humanPlayerName;
     private int botNumber = 3;
     private boolean withHumanPlayer = false;
+    private long delay = 2000L;
 
     public Semaphore semaphore = new Semaphore(0);
 
@@ -47,9 +48,16 @@ public class FrameManager {
         gameSettingsFrame.setLocationRelativeTo(currentFrame);
 
         gameSettingsFrame.setStartButtonClickEventListener(event -> {
-            String gameMode = gameSettingsFrame.getComboBoxSelectedItem();
+            String gameMode = gameSettingsFrame.getGameModeComboBoxSelectedItem();
             if (gameMode.equals(Main.PLAY_WITH_BOTS)) {
                 withHumanPlayer = true;
+            }
+
+            String difficulty = gameSettingsFrame.getDifficultyComboBoxSelectedItem();
+            switch (difficulty) {
+                case Main.EASY -> delay = 4500L;
+                case Main.MEDIUM -> delay = 3000L;
+                case Main.HARD -> delay = 1500L;
             }
 
             botNumber = gameSettingsFrame.getNumberOfSelectedBots();
@@ -79,7 +87,7 @@ public class FrameManager {
             botCardsFrame = new BotCardsFrame();
 
             for (int i = 0; i < botNumber; i++) {
-                Bot bot = new Bot("id" + i, 2000L);
+                Bot bot = new Bot("id" + i, delay);
                 botCardsFrame.addBotCard(bot);
 
                 table.register(bot);
