@@ -124,10 +124,11 @@ public class Table {
                                 .flatMap(entry -> entry.getValue().getAll().stream())
                                 .filter(card -> card.player().equals(player))
                                 .count();
-                        Pair<String, Long> pair = new Pair<>(player.name, score);
+                        var scoreFinal = score - player.targetDeck.stackSize()*2;
+                        Pair<String, Long> pair = new Pair<>(player.name, scoreFinal);
                         data.add(player.name);
-                        data.add(String.valueOf(score));
-                        return Pair.with(player.name, score);
+                        data.add(String.valueOf(scoreFinal));
+                        return Pair.with(player.name, scoreFinal);
                     }).forEach(System.out::println);
             return data;
         }

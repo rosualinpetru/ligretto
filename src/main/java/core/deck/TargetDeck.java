@@ -34,4 +34,8 @@ public record TargetDeck(Stack<Card> cards) {
     public String toString() {
         return cards.toString();
     }
+
+    public int stackSize(){
+        return cards.size();
+    }
 }
