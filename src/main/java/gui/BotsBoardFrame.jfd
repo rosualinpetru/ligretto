@@ -1,0 +1,193 @@
+JFDML JFormDesigner: "7.0.4.0.360" Java: "11.0.12" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			"$sizePolicy": 1
+			"iconImage": new com.jformdesigner.model.SwingIcon( 0, "/images/logo.png" )
+			"resizable": false
+			"title": "Ligretto"
+			"minimumSize": new java.awt.Dimension( 880, 660 )
+			"visible": true
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+				"columns": 10
+				"hgap": 60
+			} ) {
+				name: "botNorthCardsGrid"
+				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
+				"maximumSize": new java.awt.Dimension( 880, 110 )
+				"minimumSize": new java.awt.Dimension( 880, 110 )
+				"preferredSize": new java.awt.Dimension( 880, 110 )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label13"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "card1North"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "card2North"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "card3North"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label17"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "shuffleNorth"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label19"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label20"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "North"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+				"rows": 5
+				"vgap": 10
+			} ) {
+				name: "botEastCardsGrid"
+				"maximumSize": new java.awt.Dimension( 120, 440 )
+				"minimumSize": new java.awt.Dimension( 120, 440 )
+				"preferredSize": new java.awt.Dimension( 120, 440 )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "card1East"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "card2East"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "card3East"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label24"
+					"icon": sfield com.jformdesigner.model.FormObject NULL_VALUE
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "shuffleEast"
+					"text": "text"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "East"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+				"rows": 5
+				"vgap": 10
+			} ) {
+				name: "botWestCardsGrid"
+				"maximumSize": new java.awt.Dimension( 120, 440 )
+				"minimumSize": new java.awt.Dimension( 120, 440 )
+				"preferredSize": new java.awt.Dimension( 120, 440 )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "card1West"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "card2West"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/GREEN_EIGHT.png" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "card3West"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label29"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "shuffleWest"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "West"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+				"columns": 10
+				"hgap": 60
+			} ) {
+				name: "botSouthCardsGrid"
+				"maximumSize": new java.awt.Dimension( 880, 110 )
+				"minimumSize": new java.awt.Dimension( 880, 110 )
+				"preferredSize": new java.awt.Dimension( 880, 110 )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label4"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "card1South"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "card2South"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/RED_ONE.png" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "card3South"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label8"
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "shuffleSouth"
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label10"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+					"rows": 3
+					"hgap": 5
+					"vgap": 5
+				} ) {
+					name: "panel1"
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label11"
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "playButton"
+						"text": "Play"
+						"foreground": new java.awt.Color( 0, 153, 51, 255 )
+						"maximumSize": new java.awt.Dimension( 100, 35 )
+						"minimumSize": new java.awt.Dimension( 100, 35 )
+						"preferredSize": new java.awt.Dimension( 100, 35 )
+						"font": new java.awt.Font( "Segoe Print", 1, 16 )
+					} )
+					add( new FormComponent( "javax.swing.JLabel" ) {
+						name: "label12"
+					} )
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "South"
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+				"columns": 6
+				"rows": 4
+				"hgap": 50
+				"vgap": 10
+			} ) {
+				name: "boardGrid"
+				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
+				"maximumSize": new java.awt.Dimension( 440, 440 )
+				"minimumSize": new java.awt.Dimension( 440, 440 )
+				"preferredSize": new java.awt.Dimension( 440, 440 )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 0, 0 )
+			"size": new java.awt.Dimension( 1235, 890 )
+		} )
+	}
+}
