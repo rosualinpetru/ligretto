@@ -9,7 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 public class Human extends Player {
-    private BoardFrame boardFrame;
+    private final BoardFrame boardFrame;
     private int currentCardIndex;
 
     public Human(String name, BoardFrame boardFrame) {
@@ -30,10 +30,6 @@ public class Human extends Player {
         boardFrame.setShuffleClickEventListener(this::shuffleDeckOnClick);
 
         boardFrame.setDeckClickEventListener(this::tableDeckOnClick);
-
-        boardFrame.setPauseButtonClickEventListener(this::pauseOnClick);
-
-        boardFrame.setResumeButtonClickEventListener(this::resumeOnClick);
 
         boardFrame.setFocusable(true);
         boardFrame.requestFocusInWindow();
@@ -108,31 +104,31 @@ public class Human extends Player {
     }
 
     private void card1OnClick(MouseEvent mouseEvent) {
-        currentCardIndex = 1;
+        updateCardIndex(1);
     }
 
     private void card2OnClick(MouseEvent mouseEvent) {
-        currentCardIndex = 2;
+        updateCardIndex(2);
     }
 
     private void card3OnClick(MouseEvent mouseEvent) {
-        currentCardIndex = 3;
+        updateCardIndex(3);
     }
 
     private void shuffleDeckOnClick(MouseEvent mouseEvent) {
-        currentCardIndex = 4;
+        updateCardIndex(4);
     }
 
     private void tableDeckOnClick(Integer position, MouseEvent mouseEvent) {
         if (currentCardIndex < 1 || currentCardIndex > 4) {
-            currentCardIndex = 0;
+            updateCardIndex(0);
             return;
         }
 
         if (currentCardIndex == 4) {
             var cardOpt = shufflingDeck.pick();
             if (cardOpt.isEmpty()) {
-                currentCardIndex = 0;
+                updateCardIndex(0);
                 return;
             }
 
@@ -153,13 +149,13 @@ public class Human extends Player {
                 }
             }
 
-            currentCardIndex = 0;
+            updateCardIndex(0);
             return;
         }
 
         var cardOpt = facedUpCards.pick(currentCardIndex);
         if (cardOpt.isEmpty()) {
-            currentCardIndex = 0;
+            updateCardIndex(0);
             return;
         }
 
@@ -180,14 +176,11 @@ public class Human extends Player {
             }
         }
 
-        currentCardIndex = 0;
+        updateCardIndex(0);
     }
 
-    private void resumeOnClick(MouseEvent mouseEvent) {
-
-    }
-
-    private void pauseOnClick(MouseEvent mouseEvent) {
-
+    private void updateCardIndex(int index) {
+        currentCardIndex = index;
+        boardFrame.setBorderToCard(index);
     }
 }

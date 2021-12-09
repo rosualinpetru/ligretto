@@ -11,6 +11,7 @@ import utils.CardsLoader;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -24,6 +25,10 @@ import java.util.function.Consumer;
  * @author Tania Topciov
  */
 public class BoardFrame extends JFrame {
+
+    private final Border lineBorder = BorderFactory.createLineBorder(Color.BLACK, 2);
+    private final Border emptyBorder = BorderFactory.createEmptyBorder();
+
     public BoardFrame() {
         initComponents();
     }
@@ -42,8 +47,6 @@ public class BoardFrame extends JFrame {
         panel3 = new JPanel();
         label1 = new JLabel();
         playButton = new JButton();
-        pauseButton = new JButton();
-        resumeButton = new JButton();
 
         //======== this ========
         setVisible(true);
@@ -118,26 +121,6 @@ public class BoardFrame extends JFrame {
                 playButton.setMinimumSize(new Dimension(100, 35));
                 playButton.setPreferredSize(new Dimension(100, 35));
                 panel3.add(playButton);
-
-                //---- pauseButton ----
-                pauseButton.setText("Pause");
-                pauseButton.setFocusable(false);
-                pauseButton.setFont(new Font("Segoe Print", Font.BOLD, 16));
-                pauseButton.setForeground(new Color(0, 153, 51));
-                pauseButton.setMaximumSize(new Dimension(100, 40));
-                pauseButton.setMinimumSize(new Dimension(100, 40));
-                pauseButton.setPreferredSize(new Dimension(100, 40));
-                panel3.add(pauseButton);
-
-                //---- resumeButton ----
-                resumeButton.setText("Resume");
-                resumeButton.setFocusable(false);
-                resumeButton.setFont(new Font("Segoe Print", Font.BOLD, 16));
-                resumeButton.setForeground(new Color(0, 153, 51));
-                resumeButton.setMaximumSize(new Dimension(100, 40));
-                resumeButton.setMinimumSize(new Dimension(100, 40));
-                resumeButton.setPreferredSize(new Dimension(100, 40));
-                panel3.add(resumeButton);
             }
             playerCardsGrid.add(panel3);
         }
@@ -160,8 +143,6 @@ public class BoardFrame extends JFrame {
     private JPanel panel3;
     private JLabel label1;
     private JButton playButton;
-    private JButton pauseButton;
-    private JButton resumeButton;
 
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
@@ -233,24 +214,6 @@ public class BoardFrame extends JFrame {
         });
     }
 
-    public void setPauseButtonClickEventListener(Consumer<MouseEvent> consumer) {
-        pauseButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                consumer.accept(e);
-            }
-        });
-    }
-
-    public void setResumeButtonClickEventListener(Consumer<MouseEvent> consumer) {
-        resumeButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                consumer.accept(e);
-            }
-        });
-    }
-
     public void setPlayButtonClickEventListener(Consumer<MouseEvent> consumer) {
         playButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -265,7 +228,9 @@ public class BoardFrame extends JFrame {
 
     public void addLabels() {
         for (int i = 0; i < 24; i++) {
-            boardGrid.add(new JLabel());
+            JLabel label = new JLabel();
+            label.setBorder(BorderFactory.createLineBorder(Color.gray, 1));
+            boardGrid.add(label);
         }
         pack();
     }
@@ -286,5 +251,22 @@ public class BoardFrame extends JFrame {
         BufferedImage image = CardsLoader.getInstance().getCardBack();
         Image scaledImage = image.getScaledInstance(shuffle.getWidth(), shuffle.getHeight(), Image.SCALE_SMOOTH);
         shuffle.setIcon(new ImageIcon(scaledImage));
+    }
+
+    public void setBorderToCard(int index) {
+        clearAllBorders();
+        switch (index) {
+            case 1 -> card1Label.setBorder(lineBorder);
+            case 2 -> card2Label.setBorder(lineBorder);
+            case 3 -> card3Label.setBorder(lineBorder);
+            case 4 -> shuffle.setBorder(lineBorder);
+        }
+    }
+
+    private void clearAllBorders() {
+        card1Label.setBorder(emptyBorder);
+        card2Label.setBorder(emptyBorder);
+        card3Label.setBorder(emptyBorder);
+        shuffle.setBorder(emptyBorder);
     }
 }
