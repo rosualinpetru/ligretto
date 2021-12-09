@@ -3,16 +3,22 @@ package core.entities;
 import core.event.CardPlacedEvent;
 import core.exception.IllegalTableCallError;
 import gui.BotCardsPanel;
+import gui.BotsBoardFrame;
+import gui.managers.BotCardManager;
+
+import javax.swing.*;
 
 public final class Bot extends Player {
 
     private final long delayMilliseconds;
     private BotCardsPanel botCardsPanel;
+    private BotCardManager botCardManager;
 
     public Bot(String id, long delayMilliseconds) {
         super(id);
         this.delayMilliseconds = Math.max(0, delayMilliseconds);
         botCardsPanel = null;
+        botCardManager = null;
     }
 
     public void linkToCard(BotCardsPanel botCardsPanel) {
@@ -20,6 +26,14 @@ public final class Bot extends Player {
         for (int i = 1; i <= facedUpCards.size(); i++) {
             int finalI = i;
             facedUpCards.peek(i).ifPresent(card -> botCardsPanel.setCardAtPosition(finalI, card));
+        }
+    }
+
+    public void linkToCardBotsBoard(BotCardManager botCardManager){
+        this.botCardManager = botCardManager;
+        for (int i = 1; i <= facedUpCards.size(); i++) {
+            int finalI = i;
+            facedUpCards.peek(i).ifPresent(card -> botCardManager.setCardAtPosition(finalI, card));
         }
     }
 
@@ -79,6 +93,10 @@ public final class Bot extends Player {
                             }
                         }
                         shufflingDeck.shuffle();
+                        //update ui pt shuffle
+                        if(botCardManager != null){
+                            shufflingDeck.peek().ifPresent(c -> botCardManager.setShuffle(c));
+                        }
                         semaphore.release();
 
                     }
@@ -174,6 +192,9 @@ public final class Bot extends Player {
             facedUpCards.put(position, card);
             if (botCardsPanel != null) {
                 botCardsPanel.setCardAtPosition(position, card);
+            }
+            if(botCardManager != null){
+                botCardManager.setCardAtPosition(position, card);
             }
         });
         if (targetDeck.isEmpty()) {

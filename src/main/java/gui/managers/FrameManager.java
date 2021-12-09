@@ -3,10 +3,7 @@ package gui.managers;
 import core.entities.Bot;
 import core.entities.Human;
 import core.entities.Table;
-import gui.BoardFrame;
-import gui.BotCardsFrame;
-import gui.EndFrame;
-import gui.GameSettingsFrame;
+import gui.*;
 import main.Main;
 
 import javax.swing.*;
@@ -19,8 +16,9 @@ public class FrameManager {
     private JFrame currentFrame;
     private Table table;
     private BotCardsFrame botCardsFrame;
+    private BotsBoardFrame botsBoardFrame;
     private String humanPlayerName;
-    private int botNumber = 3;
+    private int botNumber = 4;
     private boolean withHumanPlayer = false;
     private long delay = 2000L;
 
@@ -67,7 +65,13 @@ public class FrameManager {
                 humanPlayerName = "Player";
             }
 
-            switchToBoardFrame();
+            if(withHumanPlayer){
+                switchToBoardFrame();
+            }
+            else{
+                switchToBotsBoardFrame();
+            }
+
         });
 
         gameSettingsFrame.setVisible(true);
@@ -107,6 +111,33 @@ public class FrameManager {
         setCurrentFrame(boardFrame);
     }
 
+    public void switchToBotsBoardFrame() {
+        BotsBoardFrame boardFrame = new BotsBoardFrame();
+        boardFrame.setLocationRelativeTo(currentFrame);
+        boardFrame.addLabels();
+
+        boardFrame.setPlayButtonClickEventListener(e -> {
+            BotsBoardManager botsBoardManager = new BotsBoardManager(boardFrame);
+            table = new Table(botsBoardManager, false);
+
+            for (int i = 0; i < 4; i++) {
+                Bot bot = new Bot("id" + i, 1500L);
+                boardFrame.addCardForBot(bot);
+
+
+                table.register(bot);
+            }
+
+            boardFrame.setAlwaysOnTop(true);
+
+            semaphore.release();
+        });
+
+        boardFrame.setVisible(true);
+        currentFrame.dispose();
+        setCurrentFrame(boardFrame);
+    }
+
     public void switchToEndFrame(ArrayList<String> data) {
         if (botCardsFrame != null) {
             botCardsFrame.dispose();
@@ -117,7 +148,11 @@ public class FrameManager {
         endFrame.setLocationRelativeTo(currentFrame);
 
         endFrame.setNextRoundButtonClickEventListener(event -> {
-            switchToBoardFrame();
+            if(withHumanPlayer){
+                switchToBoardFrame();
+            }else{
+                switchToBotsBoardFrame();
+            }
         });
 
         endFrame.setEndGameButtonClickEventListener(event -> {

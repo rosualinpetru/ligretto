@@ -9,6 +9,7 @@ import events.impl.ConcurrentEventBus;
 import events.impl.EventListener;
 import gui.managers.BoardManager;
 import gui.managers.FrameManager;
+import gui.managers.InterfBoardManager;
 import org.javatuples.Pair;
 
 import java.time.OffsetTime;
@@ -38,7 +39,7 @@ public class Table {
 
     public Phaser pauseGamePhaser;
 
-    private BoardManager boardManager;
+    private InterfBoardManager boardManager;
     private FrameManager frameManager;
 
     /**
@@ -65,7 +66,7 @@ public class Table {
         eventBus.registerListener(listener);
     }
 
-    public Table(BoardManager boardManager, boolean disableChecker) {
+    public Table(InterfBoardManager boardManager, boolean disableChecker) {
         this();
         this.boardManager = boardManager;
         this.frameManager = FrameManager.getInstance();

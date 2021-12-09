@@ -11,6 +11,7 @@ new FormModel {
 			"title": "Ligretto"
 			"minimumSize": new java.awt.Dimension( 880, 660 )
 			"visible": true
+			"defaultCloseOperation": 3
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
 				"columns": 10
 				"hgap": 60
@@ -19,7 +20,7 @@ new FormModel {
 				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
 				"maximumSize": new java.awt.Dimension( 880, 110 )
 				"minimumSize": new java.awt.Dimension( 880, 110 )
-				"preferredSize": new java.awt.Dimension( 880, 110 )
+				"preferredSize": new java.awt.Dimension( 880, 140 )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label13"
 				} )
@@ -37,13 +38,11 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label17"
+					"text": "id2"
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "shuffleNorth"
 					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
-				} )
-				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "label19"
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label20"
@@ -74,10 +73,10 @@ new FormModel {
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label24"
 					"icon": sfield com.jformdesigner.model.FormObject NULL_VALUE
+					"text": "id3"
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "shuffleEast"
-					"text": "text"
 					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
 				} )
 			}, new FormLayoutConstraints( class java.lang.String ) {
@@ -86,6 +85,7 @@ new FormModel {
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
 				"rows": 5
 				"vgap": 10
+				"hgap": 8
 			} ) {
 				name: "botWestCardsGrid"
 				"maximumSize": new java.awt.Dimension( 120, 440 )
@@ -97,7 +97,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "card2West"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/GREEN_EIGHT.png" )
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "card3West"
@@ -105,6 +105,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label29"
+					"text": "id1"
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "shuffleWest"
@@ -130,7 +131,7 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "card2South"
-					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/RED_ONE.png" )
+					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "card3South"
@@ -138,13 +139,11 @@ new FormModel {
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label8"
+					"text": "id0"
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "shuffleSouth"
 					"icon": new com.jformdesigner.model.SwingIcon( 0, "/images/cards/card_back.png" )
-				} )
-				add( new FormComponent( "javax.swing.JLabel" ) {
-					name: "label10"
 				} )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
 					"rows": 3
@@ -178,10 +177,10 @@ new FormModel {
 				"vgap": 10
 			} ) {
 				name: "boardGrid"
-				"border": new javax.swing.border.EmptyBorder( 0, 0, 0, 0 )
-				"maximumSize": new java.awt.Dimension( 440, 440 )
-				"minimumSize": new java.awt.Dimension( 440, 440 )
-				"preferredSize": new java.awt.Dimension( 440, 440 )
+				"border": new javax.swing.border.LineBorder( sfield java.awt.Color black, 1, false )
+				"maximumSize": new java.awt.Dimension( 480, 440 )
+				"minimumSize": new java.awt.Dimension( 480, 440 )
+				"preferredSize": new java.awt.Dimension( 480, 440 )
 			}, new FormLayoutConstraints( class java.lang.String ) {
 				"value": "Center"
 			} )

@@ -1,27 +1,26 @@
 package gui.managers;
 
 import core.card.Card;
-import gui.BoardFrame;
+import gui.BotsBoardFrame;
 import utils.CardsLoader;
 
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 
-public class BoardManager implements InterfBoardManager{
+public class BotsBoardManager implements InterfBoardManager{
+    private final BotsBoardFrame botsBoardFrame;
 
-    private final BoardFrame boardFrame;
-
-    public BoardManager(BoardFrame boardFrame) {
-        this.boardFrame = boardFrame;
+    public BotsBoardManager(BotsBoardFrame boardFrame) {
+        this.botsBoardFrame = boardFrame;
     }
 
     public void putCardAtPosition(Card card, int position) {
         BufferedImage image = CardsLoader.getInstance().getCard(card.colour(), card.number());
-        boardFrame.setImageAtPosition(image, position - 1);
+        botsBoardFrame.setImageAtPosition(image, position - 1);
     }
 
     public void showMessageDialog(String s) {
-        JOptionPane.showMessageDialog(boardFrame,
+        JOptionPane.showMessageDialog(botsBoardFrame,
                 s,
                 "Game Over",
                 JOptionPane.PLAIN_MESSAGE);
