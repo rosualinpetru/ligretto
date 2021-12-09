@@ -12,7 +12,7 @@ public class Checker implements Runnable {
     private final ReentrantLock lock = new ReentrantLock();
 
     private OffsetTime timestamp = OffsetTime.now();
-    //TODO: Update the countdown_duration and delays after inserting the human thread
+
     private final Duration COUNTDOWN_DURATION = Duration.ofSeconds(5);
     private final Table table;
     private final AtomicBoolean shouldEndGame = new AtomicBoolean(false);

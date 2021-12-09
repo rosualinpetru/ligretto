@@ -80,7 +80,6 @@ public class Table {
         /**
          * Upon starting the game, all player threads will also start.
          * Also, a round blocks the the thread which started it.
-         * TODO: Insert Human thread
          */
         @Override
         public void run() {
@@ -118,14 +117,13 @@ public class Table {
             players.stream()
                     .map(player -> {
                         if (endCopy == null) {
-                            // todo check why is null
                             endCopy = new HashSet<>(decks);
                         }
                         var score = endCopy.stream()
                                 .flatMap(entry -> entry.getValue().getAll().stream())
                                 .filter(card -> card.player().equals(player))
                                 .count();
-                        var scoreFinal = score - player.targetDeck.stackSize()*2;
+                        var scoreFinal = score - player.targetDeck.stackSize() * 2;
                         Pair<String, Long> pair = new Pair<>(player.name, scoreFinal);
                         data.add(player.name);
                         data.add(String.valueOf(scoreFinal));
