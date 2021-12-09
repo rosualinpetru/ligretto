@@ -120,7 +120,9 @@ public class BoardFrame extends JFrame {
                 playButton.setMaximumSize(new Dimension(100, 35));
                 playButton.setMinimumSize(new Dimension(100, 35));
                 playButton.setPreferredSize(new Dimension(100, 35));
+                panel3.add(new JLabel());
                 panel3.add(playButton);
+                panel3.add(new JLabel());
             }
             playerCardsGrid.add(panel3);
         }
