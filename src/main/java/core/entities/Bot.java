@@ -7,18 +7,28 @@ import gui.BotsBoardFrame;
 import gui.managers.BotCardManager;
 
 import javax.swing.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class Bot extends Player {
 
     private final long delayMilliseconds;
     private BotCardsPanel botCardsPanel;
     private BotCardManager botCardManager;
+    private boolean orientation;
 
     public Bot(String id, long delayMilliseconds) {
         super(id);
         this.delayMilliseconds = Math.max(0, delayMilliseconds);
         botCardsPanel = null;
         botCardManager = null;
+    }
+
+    public Bot(String id, long delayMilliseconds, boolean orientation){
+        super(id);
+        this.delayMilliseconds = Math.max(0, delayMilliseconds);
+        botCardsPanel = null;
+        botCardManager = null;
+        this.orientation = orientation;
     }
 
     public void linkToCard(BotCardsPanel botCardsPanel) {
@@ -33,7 +43,7 @@ public final class Bot extends Player {
         this.botCardManager = botCardManager;
         for (int i = 1; i <= facedUpCards.size(); i++) {
             int finalI = i;
-            facedUpCards.peek(i).ifPresent(card -> botCardManager.setCardAtPosition(finalI, card));
+            facedUpCards.peek(i).ifPresent(card -> botCardManager.setCardAtPosition(finalI, card, orientation));
         }
     }
 
@@ -44,10 +54,8 @@ public final class Bot extends Player {
     @Override
     public void run() {
         if (delayMilliseconds != 0) {
-            double sleepTime = Math.random();
-            long longSleepTime = (long) sleepTime * 1000;
             try {
-                Thread.sleep(longSleepTime);
+                Thread.sleep(ThreadLocalRandom.current().nextLong(0, delayMilliseconds));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -93,9 +101,17 @@ public final class Bot extends Player {
                             }
                         }
                         shufflingDeck.shuffle();
+
+                        if(delayMilliseconds != 0){
+                            Thread.sleep(ThreadLocalRandom.current().nextLong(0, delayMilliseconds));
+                        }
+
                         //update ui pt shuffle
                         if(botCardManager != null){
-                            shufflingDeck.peek().ifPresent(c -> botCardManager.setShuffle(c));
+                            if(orientation == true)
+                                shufflingDeck.peek().ifPresent(c -> botCardManager.setShuffle(c));
+                            else
+                                shufflingDeck.peek().ifPresent(c -> botCardManager.setShuffleWE(c));
                         }
                         semaphore.release();
 
@@ -194,7 +210,7 @@ public final class Bot extends Player {
                 botCardsPanel.setCardAtPosition(position, card);
             }
             if(botCardManager != null){
-                botCardManager.setCardAtPosition(position, card);
+                botCardManager.setCardAtPosition(position, card, orientation);
             }
         });
         if (targetDeck.isEmpty()) {

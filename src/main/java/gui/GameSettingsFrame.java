@@ -170,7 +170,7 @@ public class GameSettingsFrame extends JFrame {
                 contentPanel.add(label220);
 
                 //---- label23 ----
-                label23.setText("Players number:");
+                label23.setText("Bots number:");
                 label23.setFont(new Font("Segoe Print", Font.BOLD, 20));
                 label23.setForeground(new Color(0, 153, 51));
                 contentPanel.add(label23);

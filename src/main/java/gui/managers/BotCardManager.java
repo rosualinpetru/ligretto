@@ -22,12 +22,21 @@ public class BotCardManager {
         this.shuffle = shuffle;
     }
 
-    public void setCardAtPosition(int position, Card card) {
-        switch (position) {
-            case 1 -> setCard1(card.colour(), card.number());
-            case 2 -> setCard2(card.colour(), card.number());
-            case 3 -> setCard3(card.colour(), card.number());
+    public void setCardAtPosition(int position, Card card, boolean orientation) {
+        if(orientation){
+            switch (position) {
+                case 1 -> setCard1(card.colour(), card.number());
+                case 2 -> setCard2(card.colour(), card.number());
+                case 3 -> setCard3(card.colour(), card.number());
+            }
+        }else{
+            switch (position) {
+                case 1 -> setCard1WE(card.colour(), card.number());
+                case 2 -> setCard2WE(card.colour(), card.number());
+                case 3 -> setCard3WE(card.colour(), card.number());
+            }
         }
+
     }
 
     public void setCard1(CardColour colour, CardNumber number) {
@@ -48,11 +57,37 @@ public class BotCardManager {
         card3.setIcon(new ImageIcon(scaledImage));
     }
 
+    public void setCard1WE(CardColour colour, CardNumber number) {
+        BufferedImage image = CardsLoader.getInstance().getCard(colour, number);
+        Image scaledImage = image.getScaledInstance(card1.getHeight(), card1.getWidth(), Image.SCALE_SMOOTH);
+        card1.setIcon(new ImageIcon(scaledImage));
+    }
+
+    public void setCard2WE(CardColour colour, CardNumber number) {
+        BufferedImage image = CardsLoader.getInstance().getCard(colour, number);
+        Image scaledImage = image.getScaledInstance(card2.getHeight(), card2.getWidth(), Image.SCALE_SMOOTH);
+        card2.setIcon(new ImageIcon(scaledImage));
+    }
+
+    public void setCard3WE(CardColour colour, CardNumber number) {
+        BufferedImage image = CardsLoader.getInstance().getCard(colour, number);
+        Image scaledImage = image.getScaledInstance(card3.getHeight(), card3.getWidth(), Image.SCALE_SMOOTH);
+        card3.setIcon(new ImageIcon(scaledImage));
+    }
+
     public void setShuffle(Card card ) {
         CardColour colour = card.colour();
         CardNumber number = card.number();
         BufferedImage image = CardsLoader.getInstance().getCard(colour, number);
         Image scaledImage = image.getScaledInstance(shuffle.getWidth(), shuffle.getHeight(), Image.SCALE_SMOOTH);
+        shuffle.setIcon(new ImageIcon(scaledImage));
+    }
+
+    public void setShuffleWE(Card card ) {
+        CardColour colour = card.colour();
+        CardNumber number = card.number();
+        BufferedImage image = CardsLoader.getInstance().getCard(colour, number);
+        Image scaledImage = image.getScaledInstance(shuffle.getHeight(), shuffle.getWidth(), Image.SCALE_SMOOTH);
         shuffle.setIcon(new ImageIcon(scaledImage));
     }
 }

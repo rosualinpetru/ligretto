@@ -16,7 +16,7 @@ public class FrameManager {
     private JFrame currentFrame;
     private Table table;
     private BotCardsFrame botCardsFrame;
-    private BotsBoardFrame botsBoardFrame;
+    private BotCardManager botCardManager;
     private String humanPlayerName;
     private int botNumber = 4;
     private boolean withHumanPlayer = false;
@@ -116,12 +116,20 @@ public class FrameManager {
         boardFrame.setLocationRelativeTo(currentFrame);
         boardFrame.addLabels();
 
+        boardFrame.setBackCards();
+
         boardFrame.setPlayButtonClickEventListener(e -> {
             BotsBoardManager botsBoardManager = new BotsBoardManager(boardFrame);
             table = new Table(botsBoardManager, false);
 
+            Bot bot;
             for (int i = 0; i < 4; i++) {
-                Bot bot = new Bot("id" + i, 1500L);
+                if((i+2)%2 == 0){
+                    bot = new Bot("id" + i, 1500L, true);
+                }else{
+                    bot = new Bot("id" + i, 1500L, false);
+                }
+
                 boardFrame.addCardForBot(bot);
 
 

@@ -294,6 +294,18 @@ public class BotsBoardFrame extends JFrame {
         pack();
     }
 
+    private void setBackCard(JLabel jLabel) {
+        BufferedImage image = CardsLoader.getInstance().getCardBack();
+        Image scaledImage = image.getScaledInstance(jLabel.getWidth(), jLabel.getHeight(), Image.SCALE_SMOOTH);
+        jLabel.setIcon(new ImageIcon(scaledImage));
+    }
+
+    private void setBackCardWE(JLabel jLabel) {
+        BufferedImage image = CardsLoader.getInstance().getCardBack();
+        Image scaledImage = image.getScaledInstance(jLabel.getHeight(), jLabel.getWidth(), Image.SCALE_SMOOTH);
+        jLabel.setIcon(new ImageIcon(scaledImage));
+    }
+
     public void addCardForBot(Bot bot){
         switch (bot.name){
             case "id0" -> bot.linkToCardBotsBoard(new BotCardManager(card1South, card2South, card3South, shuffleSouth));
@@ -301,6 +313,29 @@ public class BotsBoardFrame extends JFrame {
             case "id2" -> bot.linkToCardBotsBoard(new BotCardManager(card1North, card2North, card3North, shuffleNorth));
             case "id3" -> bot.linkToCardBotsBoard(new BotCardManager(card1East, card2East, card3East, shuffleEast));
         }
+    }
+
+    public void setBackCards(){
+        setBackCard(shuffleNorth);
+        setBackCard(shuffleSouth);
+        setBackCardWE(shuffleWest);
+        setBackCardWE(shuffleEast);
+
+        setBackCard(card1North);
+        setBackCard(card2North);
+        setBackCard(card3North);
+
+        setBackCard(card1South);
+        setBackCard(card2South);
+        setBackCard(card3South);
+
+        setBackCardWE(card1West);
+        setBackCardWE(card2West);
+        setBackCardWE(card3West);
+
+        setBackCardWE(card1East);
+        setBackCardWE(card2East);
+        setBackCardWE(card3East);
     }
 
 }

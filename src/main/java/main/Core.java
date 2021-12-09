@@ -10,7 +10,7 @@ public class Core {
         var table = new Table();
 
         // Each bot need to be registered to a table
-        int NR_OF_PLAYERS = 5;
+        int NR_OF_PLAYERS = 100;
         for (int i = 0; i < NR_OF_PLAYERS; i++) {
             table.register(new Bot("id" + i, 0));
         }
