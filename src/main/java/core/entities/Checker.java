@@ -13,7 +13,7 @@ public class Checker implements Runnable {
 
     private OffsetTime timestamp = OffsetTime.now();
 
-    private final Duration COUNTDOWN_DURATION = Duration.ofSeconds(5);
+    private final Duration COUNTDOWN_DURATION = Duration.ofSeconds(60);
     private final Table table;
     private final AtomicBoolean shouldEndGame = new AtomicBoolean(false);
     private boolean disabled = false;

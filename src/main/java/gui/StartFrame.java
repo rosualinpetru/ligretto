@@ -59,8 +59,8 @@ public class StartFrame extends JFrame {
             //---- startButton ----
             startButton.setText("Let's play!");
             startButton.setFont(new Font("Segoe Print", Font.BOLD, 18));
-            startButton.setForeground(Color.white);
-            startButton.setBackground(new Color(0, 153, 51));
+            startButton.setForeground(new Color(0, 153, 51));
+            startButton.setBackground(Color.white);
             startButton.setMaximumSize(new Dimension(880, 40));
             startButton.setMinimumSize(new Dimension(880, 40));
             startButton.setPreferredSize(new Dimension(880, 40));

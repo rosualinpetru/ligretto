@@ -7,7 +7,6 @@ import core.exception.IllegalTableCallError;
 import events.EventBus;
 import events.impl.ConcurrentEventBus;
 import events.impl.EventListener;
-import gui.managers.BoardManager;
 import gui.managers.FrameManager;
 import gui.managers.InterfBoardManager;
 import org.javatuples.Pair;
@@ -123,7 +122,7 @@ public class Table {
                                 .flatMap(entry -> entry.getValue().getAll().stream())
                                 .filter(card -> card.player().equals(player))
                                 .count();
-                        var scoreFinal = score - player.targetDeck.stackSize() * 2;
+                        var scoreFinal = score - player.targetDeck.stackSize() * 2L;
                         Pair<String, Long> pair = new Pair<>(player.name, scoreFinal);
                         data.add(player.name);
                         data.add(String.valueOf(scoreFinal));

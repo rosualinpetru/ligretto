@@ -101,7 +101,7 @@ public class BotsBoardFrame extends JFrame {
             botNorthCardsGrid.add(card3North);
 
             //---- label17 ----
-            label17.setText("id2");
+            label17.setText("Cortana");
             botNorthCardsGrid.add(label17);
 
             //---- shuffleNorth ----
@@ -132,7 +132,7 @@ public class BotsBoardFrame extends JFrame {
 
             //---- label24 ----
             label24.setIcon(null);
-            label24.setText("id3");
+            label24.setText("Google");
             botEastCardsGrid.add(label24);
 
             //---- shuffleEast ----
@@ -161,7 +161,7 @@ public class BotsBoardFrame extends JFrame {
             botWestCardsGrid.add(card3West);
 
             //---- label29 ----
-            label29.setText("id1");
+            label29.setText("Alexa");
             botWestCardsGrid.add(label29);
 
             //---- shuffleWest ----
@@ -191,7 +191,7 @@ public class BotsBoardFrame extends JFrame {
             botSouthCardsGrid.add(card3South);
 
             //---- label8 ----
-            label8.setText("id0");
+            label8.setText("Siri");
             botSouthCardsGrid.add(label8);
 
             //---- shuffleSouth ----
@@ -306,12 +306,12 @@ public class BotsBoardFrame extends JFrame {
         jLabel.setIcon(new ImageIcon(scaledImage));
     }
 
-    public void addCardForBot(Bot bot){
-        switch (bot.name){
-            case "id0" -> bot.linkToCardBotsBoard(new BotCardManager(card1South, card2South, card3South, shuffleSouth));
-            case "id1" -> bot.linkToCardBotsBoard(new BotCardManager(card1West, card2West, card3West, shuffleWest));
-            case "id2" -> bot.linkToCardBotsBoard(new BotCardManager(card1North, card2North, card3North, shuffleNorth));
-            case "id3" -> bot.linkToCardBotsBoard(new BotCardManager(card1East, card2East, card3East, shuffleEast));
+    public void addCardForBot(Bot bot, int order){
+        switch (order){
+            case 0 -> bot.linkToCardBotsBoard(new BotCardManager(card1South, card2South, card3South, shuffleSouth));
+            case 1 -> bot.linkToCardBotsBoard(new BotCardManager(card1West, card2West, card3West, shuffleWest));
+            case 2 -> bot.linkToCardBotsBoard(new BotCardManager(card1North, card2North, card3North, shuffleNorth));
+            case 3 -> bot.linkToCardBotsBoard(new BotCardManager(card1East, card2East, card3East, shuffleEast));
         }
     }
 

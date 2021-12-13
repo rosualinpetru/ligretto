@@ -67,17 +67,18 @@ public final class Bot extends Player {
                         table.pause();
                     }
 
-                    if (!shufflingDeck.isEmpty()) {
-
-                        delay();
-
-                        semaphore.acquire();
+                    semaphore.acquire();
 
                     /* Can be optimised, yet it is sufficient to simulate an AI
                         A bot should look for 1s at start and whenever pops a card
                         from the target deck.
                      */
-                        putFacedUpOnes();
+                    putFacedUpOnes();
+                    checkPlacedCards();
+
+                    if (!shufflingDeck.isEmpty()) {
+
+                        delay();
 
                         var cardOpt = shufflingDeck.pick();
                         if (cardOpt.isEmpty()) {
@@ -87,7 +88,6 @@ public final class Bot extends Player {
                         var card = cardOpt.get();
                         if (card.number().isFirst()) {
                             table.newDeck(card);
-
                         } else {
                             var fitPositionOpt = table.fittingDeck(card);
                             if (fitPositionOpt.isPresent()) {
@@ -108,14 +108,13 @@ public final class Bot extends Player {
 
                         //update ui pt shuffle
                         if(botCardManager != null){
-                            if(orientation == true)
+                            if(orientation)
                                 shufflingDeck.peek().ifPresent(c -> botCardManager.setShuffle(c));
                             else
                                 shufflingDeck.peek().ifPresent(c -> botCardManager.setShuffleWE(c));
                         }
-                        semaphore.release();
-
                     }
+                    semaphore.release();
                     Thread.yield();
                 }
             } catch (IllegalTableCallError | InterruptedException ignored) {
@@ -192,6 +191,22 @@ public final class Bot extends Player {
             var card = cardOpt.get();
             if (card.number().isFirst()) {
                 table.newDeck(card);
+                updateFacedUpCards(i);
+            } else {
+                facedUpCards.put(i, card);
+            }
+        }
+    }
+
+    private void checkPlacedCards() {
+        for (int i = 1; i <= facedUpCards.size(); i++) {
+            var cardOpt = facedUpCards.pick(i);
+            if (cardOpt.isEmpty())
+                continue;
+            var card = cardOpt.get();
+            var positionOpt = table.fittingDeck(card);
+            if (positionOpt.isPresent()) {
+                table.put(card, positionOpt.get());
                 updateFacedUpCards(i);
             } else {
                 facedUpCards.put(i, card);

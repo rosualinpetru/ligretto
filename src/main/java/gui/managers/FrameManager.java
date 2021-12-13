@@ -8,10 +8,12 @@ import main.Main;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
 public class FrameManager {
 
+    private final List<String> names = List.of("Siri", "Alexa", "Cortana", "Google", "Jarvis", "Cyd");
     private final static FrameManager instance = new FrameManager();
     private JFrame currentFrame;
     private Table table;
@@ -91,7 +93,7 @@ public class FrameManager {
             botCardsFrame = new BotCardsFrame();
 
             for (int i = 0; i < botNumber; i++) {
-                Bot bot = new Bot("id" + i, delay);
+                Bot bot = new Bot(names.get(i), delay);
                 botCardsFrame.addBotCard(bot);
 
                 table.register(bot);
@@ -125,12 +127,12 @@ public class FrameManager {
             Bot bot;
             for (int i = 0; i < 4; i++) {
                 if((i+2)%2 == 0){
-                    bot = new Bot("id" + i, 1500L, true);
+                    bot = new Bot(names.get(i), 1500L, true);
                 }else{
-                    bot = new Bot("id" + i, 1500L, false);
+                    bot = new Bot(names.get(i), 1500L, false);
                 }
 
-                boardFrame.addCardForBot(bot);
+                boardFrame.addCardForBot(bot, i);
 
 
                 table.register(bot);
